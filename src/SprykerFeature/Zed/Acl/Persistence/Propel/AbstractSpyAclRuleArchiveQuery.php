@@ -5,7 +5,7 @@
 
 namespace SprykerFeature\Zed\Acl\Persistence\Propel;
 
-use SprykerFeature\Zed\Acl\Persistence\Propel\Base\SpyAclRuleArchiveQuery as BaseSpyAclRuleArchiveQuery;
+use Orm\Zed\Acl\Persistence\Base\SpyAclRuleArchiveQuery as BaseSpyAclRuleArchiveQuery;
 
 /**
  * Skeleton subclass for performing query and update operations on the 'spy_acl_rule_archive' table.
@@ -17,7 +17,7 @@ use SprykerFeature\Zed\Acl\Persistence\Propel\Base\SpyAclRuleArchiveQuery as Bas
  * long as it does not already exist in the output directory.
  *
  */
-class SpyAclRuleArchiveQuery extends BaseSpyAclRuleArchiveQuery
+abstract class AbstractSpyAclRuleArchiveQuery extends BaseSpyAclRuleArchiveQuery
 {
 
 } // SpyAclRuleArchiveQuery

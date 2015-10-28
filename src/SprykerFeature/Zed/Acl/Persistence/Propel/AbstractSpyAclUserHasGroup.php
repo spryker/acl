@@ -5,10 +5,10 @@
 
 namespace SprykerFeature\Zed\Acl\Persistence\Propel;
 
-use SprykerFeature\Zed\Acl\Persistence\Propel\Base\SpyAclRuleQuery as BaseSpyAclRuleQuery;
+use Orm\Zed\Acl\Persistence\Base\SpyAclUserHasGroup as BaseSpyAclUserHasGroup;
 
 /**
- * Skeleton subclass for performing query and update operations on the 'spy_acl_rule' table.
+ * Skeleton subclass for representing a row from the 'spy_acl_user_has_group' table.
  *
  *
  *
@@ -17,7 +17,7 @@ use SprykerFeature\Zed\Acl\Persistence\Propel\Base\SpyAclRuleQuery as BaseSpyAcl
  * long as it does not already exist in the output directory.
  *
  */
-class SpyAclRuleQuery extends BaseSpyAclRuleQuery
+abstract class AbstractSpyAclUserHasGroup extends BaseSpyAclUserHasGroup
 {
 
-} // SpyAclRuleQuery
+}

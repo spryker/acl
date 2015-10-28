@@ -5,10 +5,10 @@
 
 namespace SprykerFeature\Zed\Acl\Persistence\Propel;
 
-use SprykerFeature\Zed\Acl\Persistence\Propel\Base\SpyAclUserHasGroup as BaseSpyAclUserHasGroup;
+use Orm\Zed\Acl\Persistence\Base\SpyAclGroup as BaseSpyAclGroup;
 
 /**
- * Skeleton subclass for representing a row from the 'spy_acl_user_has_group' table.
+ * Skeleton subclass for representing a row from the 'spy_acl_group' table.
  *
  *
  *
@@ -17,7 +17,7 @@ use SprykerFeature\Zed\Acl\Persistence\Propel\Base\SpyAclUserHasGroup as BaseSpy
  * long as it does not already exist in the output directory.
  *
  */
-class SpyAclUserHasGroup extends BaseSpyAclUserHasGroup
+abstract class AbstractSpyAclGroup extends BaseSpyAclGroup
 {
 
 }

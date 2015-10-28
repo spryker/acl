@@ -5,10 +5,10 @@
 
 namespace SprykerFeature\Zed\Acl\Persistence\Propel;
 
-use SprykerFeature\Zed\Acl\Persistence\Propel\Base\SpyAclGroupQuery as BaseSpyAclGroupQuery;
+use Orm\Zed\Acl\Persistence\Base\SpyAclUserHasGroupQuery as BaseSpyAclUserHasGroupQuery;
 
 /**
- * Skeleton subclass for performing query and update operations on the 'spy_acl_group' table.
+ * Skeleton subclass for performing query and update operations on the 'spy_acl_user_has_group' table.
  *
  *
  *
@@ -17,7 +17,7 @@ use SprykerFeature\Zed\Acl\Persistence\Propel\Base\SpyAclGroupQuery as BaseSpyAc
  * long as it does not already exist in the output directory.
  *
  */
-class SpyAclGroupQuery extends BaseSpyAclGroupQuery
+abstract class AbstractSpyAclUserHasGroupQuery extends BaseSpyAclUserHasGroupQuery
 {
 
-} // SpyAclGroupQuery
+} // SpyAclUserHasGroupQuery

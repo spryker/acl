@@ -5,10 +5,10 @@
 
 namespace SprykerFeature\Zed\Acl\Persistence\Propel;
 
-use SprykerFeature\Zed\Acl\Persistence\Propel\Base\SpyAclRole as BaseSpyAclRole;
+use Orm\Zed\Acl\Persistence\Base\SpyAclRuleArchive as BaseSpyAclRuleArchive;
 
 /**
- * Skeleton subclass for representing a row from the 'spy_acl_role' table.
+ * Skeleton subclass for representing a row from the 'spy_acl_rule_archive' table.
  *
  *
  *
@@ -17,7 +17,7 @@ use SprykerFeature\Zed\Acl\Persistence\Propel\Base\SpyAclRole as BaseSpyAclRole;
  * long as it does not already exist in the output directory.
  *
  */
-class SpyAclRole extends BaseSpyAclRole
+abstract class AbstractSpyAclRuleArchive extends BaseSpyAclRuleArchive
 {
 
 }

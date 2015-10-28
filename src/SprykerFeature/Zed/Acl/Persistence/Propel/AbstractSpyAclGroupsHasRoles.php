@@ -5,10 +5,10 @@
 
 namespace SprykerFeature\Zed\Acl\Persistence\Propel;
 
-use SprykerFeature\Zed\Acl\Persistence\Propel\Base\SpyAclGroupsHasRolesQuery as BaseSpyAclGroupsHasRolesQuery;
+use Orm\Zed\Acl\Persistence\Base\SpyAclGroupsHasRoles as BaseSpyAclGroupsHasRoles;
 
 /**
- * Skeleton subclass for performing query and update operations on the 'spy_acl_groups_has_roles' table.
+ * Skeleton subclass for representing a row from the 'spy_acl_groups_has_roles' table.
  *
  *
  *
@@ -17,7 +17,7 @@ use SprykerFeature\Zed\Acl\Persistence\Propel\Base\SpyAclGroupsHasRolesQuery as 
  * long as it does not already exist in the output directory.
  *
  */
-class SpyAclGroupsHasRolesQuery extends BaseSpyAclGroupsHasRolesQuery
+abstract class AbstractSpyAclGroupsHasRoles extends BaseSpyAclGroupsHasRoles
 {
 
-} // SpyAclGroupsHasRolesQuery
+}

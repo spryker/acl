@@ -5,7 +5,7 @@
 
 namespace SprykerFeature\Zed\Acl\Persistence\Propel;
 
-use SprykerFeature\Zed\Acl\Persistence\Propel\Base\SpyAclRule as BaseSpyAclRule;
+use Orm\Zed\Acl\Persistence\Base\SpyAclRule as BaseSpyAclRule;
 
 /**
  * Skeleton subclass for representing a row from the 'spy_acl_rule' table.
@@ -17,7 +17,7 @@ use SprykerFeature\Zed\Acl\Persistence\Propel\Base\SpyAclRule as BaseSpyAclRule;
  * long as it does not already exist in the output directory.
  *
  */
-class SpyAclRule extends BaseSpyAclRule
+abstract class AbstractSpyAclRule extends BaseSpyAclRule
 {
 
 }
