@@ -8,7 +8,7 @@ namespace Spryker\Zed\Acl\Business;
 
 use Spryker\Zed\Acl\Business\Model\Role;
 use Spryker\Zed\Acl\Business\Model\Group;
-use Spryker\Zed\Kernel\Business\AbstractBusinessDependencyContainer;
+use Spryker\Zed\Kernel\Business\AbstractBusinessFactory;
 use Spryker\Zed\Acl\AclConfig;
 use Spryker\Zed\Acl\Business\Model\GroupInterface;
 use Spryker\Zed\Acl\Business\Model\RoleInterface;
@@ -22,7 +22,7 @@ use Spryker\Zed\Acl\Persistence\AclQueryContainer;
  * @method AclConfig getConfig()
  * @method AclQueryContainer getQueryContainer()
  */
-class AclDependencyContainer extends AbstractBusinessDependencyContainer
+class AclBusinessFactory extends AbstractBusinessFactory
 {
 
     /**
