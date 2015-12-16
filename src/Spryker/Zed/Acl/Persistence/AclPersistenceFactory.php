@@ -16,7 +16,7 @@ use Orm\Zed\Acl\Persistence\SpyAclGroupsHasRolesQuery;
 use Orm\Zed\User\Persistence\SpyUserQuery;
 use Spryker\Zed\User\Persistence\UserQueryContainer;
 
-class AclDependencyContainer extends AbstractPersistenceFactory
+class AclPersistenceFactory extends AbstractPersistenceFactory
 {
 
     /**
