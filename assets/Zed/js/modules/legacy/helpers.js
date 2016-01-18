@@ -1,14 +1,11 @@
 /**
  *
- * Spryker alert message manager
+ * ACL helpers
  * @copyright: Spryker Systems GmbH
  *
  */
 
 'use strict';
-
-// var SprykerAlert = require('Gui/assets/Zed/modules/legacy/SprykerAlert');
-// var SprykerAjaxCallbacks = require('Gui/assets/Zed/modules/legacy/SprykerAjaxCallbacks');
 
 function spinnerCreate(elementId){
     var container = $('<div/>', {

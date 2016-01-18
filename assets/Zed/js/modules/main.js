@@ -1,11 +1,12 @@
 /**
  *
- * Spryker alert message manager
+ * ACL main module
  * @copyright: Spryker Systems GmbH
  *
  */
 
 'use strict';
 
-require('../sass/acl.scss');
+require('ZedGui');
 require('./legacy/logic');
+require('../../sass/main.scss');

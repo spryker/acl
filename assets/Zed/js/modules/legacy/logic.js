@@ -1,16 +1,13 @@
 /**
  *
- * Spryker alert message manager
+ * ACL logic
  * @copyright: Spryker Systems GmbH
  *
  */
 
 'use strict';
 
-require('ZedGui');
-require('./acl.helpers.js');
-
-// var SprykerAjax = require('vendor/spryker/spryker/Bundles/Gui/assets/Zed/modules/legacy/SprykerAjax');
+require('./helpers.js');
 
 $(document).ready(function() {
     $('#group-table').on('click', 'a.display-roles', function(event){
@@ -19,7 +16,7 @@ $(document).ready(function() {
         SprykerAjax.getRolesForGroup(idGroup);
     });
 
-    $('#users-in-group').on('click', 'a.remove-user-from-group', function(event){
+    $('#users-in-group').on('click', 'a', function(event){
         event.preventDefault();
         var options = $(this).data('options');
         SprykerAjax.removeUserFromGroup(options);

@@ -1,6 +1,6 @@
 /**
  *
- * Spryker alert message manager
+ * ACL main entry point
  * @copyright: Spryker Systems GmbH
  *
  */
