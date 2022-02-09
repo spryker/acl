@@ -176,7 +176,6 @@ class Rule implements RuleInterface
         $controller = AclConstants::VALIDATOR_WILDCARD,
         $action = AclConstants::VALIDATOR_WILDCARD
     ) {
-        /** @var array<\Orm\Zed\Acl\Persistence\SpyAclRule> $ruleCollection */
         $ruleCollection = $this->queryContainer->queryRuleByPathAndRoles($roles, $bundle, $controller, $action)->find();
 
         $rulesTransfer = new RulesTransfer();
@@ -198,7 +197,6 @@ class Rule implements RuleInterface
     public function getRulesForGroupId($idGroup)
     {
         $relationshipCollection = $this->queryContainer->queryGroupHasRole($idGroup)->find();
-        /** @var array<\Orm\Zed\Acl\Persistence\SpyAclRole> $roleCollection */
         $roleCollection = $this->queryContainer->queryGroupRules($relationshipCollection)->find();
 
         $rulesTransfer = new RulesTransfer();
