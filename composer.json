@@ -9,7 +9,7 @@
         "spryker/acl-merchant-portal-extension": "^1.0.0",
         "spryker/config": "^3.0.0",
         "spryker/event-dispatcher-extension": "^1.0.0",
-        "spryker/gui": "^3.33.0 || ^4.0.0",
+        "spryker/gui": "^3.33.0 || ^4.3.3",
         "spryker/kernel": "^3.52.0",
         "spryker/propel-orm": "^1.0.0",
         "spryker/router": "^1.21.0",
