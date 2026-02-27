@@ -8,6 +8,7 @@
 namespace Spryker\Zed\Acl\Persistence;
 
 use Generated\Shared\Transfer\RolesTransfer;
+use Orm\Zed\Acl\Persistence\SpyAclGroupsHasRolesQuery;
 use Propel\Runtime\Collection\ObjectCollection;
 use Spryker\Shared\Acl\AclConstants;
 
@@ -190,6 +191,16 @@ interface AclQueryContainerInterface
      * @return \Orm\Zed\Acl\Persistence\SpyAclGroupsHasRolesQuery
      */
     public function queryGroupHasRole($idGroup);
+
+    /**
+     * Specification:
+     * - Query for group has roles by group ids.
+     *
+     * @api
+     *
+     * @param array<int> $groupIds
+     */
+    public function queryGroupHasRoles(array $groupIds): SpyAclGroupsHasRolesQuery;
 
     /**
      * Specification:

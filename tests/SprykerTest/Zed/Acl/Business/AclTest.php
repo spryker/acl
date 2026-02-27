@@ -20,6 +20,7 @@ use Generated\Shared\Transfer\RoleTransfer;
 use Generated\Shared\Transfer\RulesTransfer;
 use Generated\Shared\Transfer\RuleTransfer;
 use Generated\Shared\Transfer\UserTransfer;
+use ReflectionClass;
 use Spryker\Shared\Acl\AclConstants;
 use Spryker\Zed\Acl\AclDependencyProvider;
 use Spryker\Zed\Acl\Business\AclFacade;
@@ -28,6 +29,7 @@ use Spryker\Zed\Acl\Business\Exception\RoleNameEmptyException;
 use Spryker\Zed\Acl\Business\Exception\RoleNameExistsException;
 use Spryker\Zed\Acl\Business\Exception\RootNodeModificationException;
 use Spryker\Zed\Acl\Business\Exception\RuleNotFoundException;
+use Spryker\Zed\Acl\Business\Model\Rule;
 use Spryker\Zed\Acl\Dependency\Facade\AclToUserInterface;
 use Spryker\Zed\User\Business\UserFacade;
 
@@ -76,9 +78,37 @@ class AclTest extends Unit
     {
         parent::setUp();
 
+        $this->clearRuleStaticCache();
+
         $this->rolesTransfer = new RolesTransfer();
         $this->facade = new AclFacade();
         $this->userFacade = new UserFacade();
+    }
+
+    /**
+     * @return void
+     */
+    protected function clearRuleStaticCache(): void
+    {
+        $ruleClass = new ReflectionClass(Rule::class);
+
+        $cacheProperty = $ruleClass->getProperty('cache');
+        $cacheProperty->setValue([]);
+
+        $groupsTransferCacheProperty = $ruleClass->getProperty('groupsTransferCache');
+        $groupsTransferCacheProperty->setValue([]);
+
+        $rulesTransferCacheProperty = $ruleClass->getProperty('rulesTransferCache');
+        $rulesTransferCacheProperty->setValue([]);
+
+        $ignoredRulesCacheProperty = $ruleClass->getProperty('ignoredRulesCache');
+        $ignoredRulesCacheProperty->setValue(null);
+
+        $ignoredRuleValidatorProperty = $ruleClass->getProperty('ignoredRuleValidator');
+        $ignoredRuleValidatorProperty->setValue(null);
+
+        $ruleValidatorProperty = $ruleClass->getProperty('ruleValidator');
+        $ruleValidatorProperty->setValue(null);
     }
 
     /**

@@ -7,6 +7,7 @@
 
 namespace Spryker\Zed\Acl\Business\Model;
 
+use ArrayObject;
 use Generated\Shared\Transfer\GroupsTransfer;
 use Generated\Shared\Transfer\RolesTransfer;
 use Generated\Shared\Transfer\RoleTransfer;
@@ -38,6 +39,12 @@ class Rule implements RuleInterface
      */
     protected static array $rulesTransferCache = [];
 
+    protected static ?RulesTransfer $ignoredRulesCache = null;
+
+    protected static ?RuleValidatorInterface $ignoredRuleValidator = null;
+
+    protected static ?RuleValidatorInterface $ruleValidator = null;
+
     /**
      * @param \Spryker\Zed\Acl\Business\Model\GroupInterface $group
      * @param \Spryker\Zed\Acl\Persistence\AclQueryContainerInterface $queryContainer
@@ -51,6 +58,7 @@ class Rule implements RuleInterface
         protected AclQueryContainerInterface $queryContainer,
         protected AclToUserInterface $userFacade,
         protected RuleValidatorInterface $rulesValidator,
+        protected RuleValidatorInterface $ignoreRulesValidator,
         protected AclConfig $config,
         protected array $aclAccessCheckerStrategyPlugins
     ) {
@@ -190,6 +198,23 @@ class Rule implements RuleInterface
         return $rulesTransfer;
     }
 
+    protected function getRulesForGroupIds(array $groupIds): RulesTransfer
+    {
+        /** @var \Propel\Runtime\Collection\ObjectCollection $relationshipCollection */
+        $relationshipCollection = $this->queryContainer->queryGroupHasRoles($groupIds)->find();
+        $roleCollection = $this->queryContainer->queryGroupRules($relationshipCollection)->find();
+
+        $rulesTransfer = new RulesTransfer();
+
+        foreach ($roleCollection as $ruleEntity) {
+            $ruleTransfer = new RuleTransfer();
+            $ruleTransfer->fromArray($ruleEntity->toArray(), true);
+            $rulesTransfer->addRule($ruleTransfer);
+        }
+
+        return $rulesTransfer;
+    }
+
     /**
      * @param int $id
      *
@@ -238,19 +263,23 @@ class Rule implements RuleInterface
      */
     public function isIgnorable($bundle, $controller, $action)
     {
-        $ignoredRules = $this->config->getRules();
+        $this->ignoreRulesValidator->setRules($this->getIgnorableRules());
 
-        foreach ($ignoredRules as $arrayRule) {
-            $ruleTransfer = new RuleTransfer();
-            $ruleTransfer->setBundle($arrayRule['bundle']);
-            $ruleTransfer->setController($arrayRule['controller']);
-            $ruleTransfer->setAction($arrayRule['action']);
-            $ruleTransfer->setType($arrayRule['type']);
+        return $this->ignoreRulesValidator->isAccessible($bundle, $controller, $action);
+    }
 
-            $this->rulesValidator->addRule($ruleTransfer);
+    protected function cachedIsIgnorable(string $bundle, string $controller, string $action, UserTransfer $userTransfer): bool
+    {
+        if ($this->isCacheShouldBeIgnored($userTransfer)) {
+            $this->isIgnorable($bundle, $controller, $action);
         }
 
-        return $this->rulesValidator->isAccessible($bundle, $controller, $action);
+        if (static::$ignoredRuleValidator === null) {
+            static::$ignoredRuleValidator = $this->ignoreRulesValidator;
+            static::$ignoredRuleValidator->setRules($this->getIgnorableRules());
+        }
+
+        return static::$ignoredRuleValidator->isAccessible($bundle, $controller, $action);
     }
 
     /**
@@ -287,16 +316,7 @@ class Rule implements RuleInterface
      */
     public function isAllowed(UserTransfer $userTransfer, $bundle, $controller, $action): bool
     {
-        /*
-         * HOTFIX: Bypass ACL cache for merchant agents to prevent token persistence issues
-         *
-         * Problem: Merchant agents may have incomplete token initialization during session restoration,
-         * causing the ACL cache to store incorrect "access denied" results. This happens because:
-         *
-         * Performance Impact: Minimal - only affects merchant agent users, regular users keep cache.
-         * Alternative: Complex conditional caching based on token state (more error-prone).
-         */
-        if ($userTransfer->getIsMerchantAgent()) {
+        if ($this->isCacheShouldBeIgnored($userTransfer)) {
             return $this->executeIsAllowed($userTransfer, $bundle, $controller, $action);
         }
 
@@ -321,7 +341,7 @@ class Rule implements RuleInterface
             $this->registerSystemUserRules($userTransfer);
         }
 
-        if ($this->isIgnorable($bundle, $controller, $action)) {
+        if ($this->cachedIsIgnorable($bundle, $controller, $action, $userTransfer)) {
             return true;
         }
 
@@ -334,29 +354,12 @@ class Rule implements RuleInterface
             return false;
         }
 
-        $this->provideUserRuleWhitelist();
-
         $isAllowed = $this->executeAclAccessCheckerStrategyPlugins($userTransfer, $bundle, $controller, $action);
         if ($isAllowed !== null) {
             return $isAllowed;
         }
 
-        foreach ($groupsTransfer->getGroups() as $groupTransfer) {
-            $rulesTransfer = $this->getRulesTransferByIdGroup($groupTransfer->getIdAclGroup(), $userTransfer);
-
-            if (!$rulesTransfer->getRules()) {
-                continue;
-            }
-
-            $this->rulesValidator->setRules($rulesTransfer);
-            $isAccessible = $this->rulesValidator->isAccessible($bundle, $controller, $action);
-
-            if ($isAccessible) {
-                return true;
-            }
-        }
-
-        return false;
+        return $this->cachableIsAllowed($groupsTransfer, $userTransfer, $bundle, $controller, $action);
     }
 
     /**
@@ -368,16 +371,7 @@ class Rule implements RuleInterface
     {
         $idUser = $userTransfer->getIdUser();
 
-        /*
-         * HOTFIX: Bypass ACL cache for merchant agents to prevent token persistence issues
-         *
-         * Problem: Merchant agents may have incomplete token initialization during session restoration,
-         * causing the ACL cache to store incorrect "access denied" results. This happens because:
-         *
-         * Performance Impact: Minimal - only affects merchant agent users, regular users keep cache.
-         * Alternative: Complex conditional caching based on token state (more error-prone).
-         */
-        if ($userTransfer->getIsMerchantAgent()) {
+        if ($this->isCacheShouldBeIgnored($userTransfer)) {
             return $this->group->getUserGroups($idUser);
         }
 
@@ -392,34 +386,51 @@ class Rule implements RuleInterface
     }
 
     /**
-     * @param int $idGroup
+     * @param array<int> $groupIds
      * @param \Generated\Shared\Transfer\UserTransfer $userTransfer
      *
      * @return \Generated\Shared\Transfer\RulesTransfer
      */
-    protected function getRulesTransferByIdGroup(int $idGroup, UserTransfer $userTransfer): RulesTransfer
+    protected function getRulesTransferByGroupIds(array $groupIds, UserTransfer $userTransfer): RulesTransfer
     {
-        /*
-         * HOTFIX: Bypass ACL cache for merchant agents to prevent token persistence issues
-         *
-         * Problem: Merchant agents may have incomplete token initialization during session restoration,
-         * causing the ACL cache to store incorrect "access denied" results. This happens because:
-         *
-         * Performance Impact: Minimal - only affects merchant agent users, regular users keep cache.
-         * Alternative: Complex conditional caching based on token state (more error-prone).
-         */
-        if ($userTransfer->getIsMerchantAgent()) {
-            return $this->getRulesForGroupId($idGroup);
+        if ($this->isCacheShouldBeIgnored($userTransfer)) {
+            return $this->getRulesForGroupIds($groupIds);
         }
 
-        if (isset(static::$rulesTransferCache[$idGroup])) {
-            return static::$rulesTransferCache[$idGroup];
+        $cacheKey = implode('-', $groupIds);
+        if (isset(static::$rulesTransferCache[$cacheKey])) {
+            return static::$rulesTransferCache[$cacheKey];
         }
 
-        $rulesTransfer = $this->getRulesForGroupId($idGroup);
-        static::$rulesTransferCache[$idGroup] = $rulesTransfer;
+        $rulesTransfer = $this->getRulesForGroupIds($groupIds);
+        static::$rulesTransferCache[$cacheKey] = $rulesTransfer;
 
         return $rulesTransfer;
+    }
+
+    public function cachableIsAllowed(GroupsTransfer $groupsTransfer, UserTransfer $userTransfer, string $bundle, string $controller, string $action): bool
+    {
+        if ($this->isCacheShouldBeIgnored($userTransfer) || static::$ruleValidator === null) {
+            $this->provideUserRuleWhitelist();
+
+            $groupIds = [];
+            foreach ($groupsTransfer->getGroups() as $groupEntity) {
+                $groupIds[] = $groupEntity->getIdAclGroup();
+            }
+            $rulesTransfer = $this->getRulesTransferByGroupIds($groupIds, $userTransfer);
+
+            if (!$rulesTransfer->getRules()->count()) {
+                return false;
+            }
+
+            $this->rulesValidator->setRules($rulesTransfer);
+
+            static::$ruleValidator = $this->rulesValidator;
+
+            return $this->rulesValidator->isAccessible($bundle, $controller, $action);
+        }
+
+        return static::$ruleValidator->isAccessible($bundle, $controller, $action);
     }
 
     /**
@@ -462,5 +473,47 @@ class Rule implements RuleInterface
         }
 
         return $isAllowed;
+    }
+
+    /**
+     * @return \Generated\Shared\Transfer\RulesTransfer
+     */
+    public function getIgnorableRules(): RulesTransfer
+    {
+        if (static::$ignoredRulesCache === null) {
+            $ignoredRules = $this->config->getRules();
+
+            $ruleTransfers = [];
+            foreach ($ignoredRules as $arrayRule) {
+                $ruleTransfer = new RuleTransfer();
+                $ruleTransfer->setBundle($arrayRule['bundle']);
+                $ruleTransfer->setController($arrayRule['controller']);
+                $ruleTransfer->setAction($arrayRule['action']);
+                $ruleTransfer->setType($arrayRule['type']);
+                $ruleTransfers[] = $ruleTransfer;
+            }
+
+            static::$ignoredRulesCache = (new RulesTransfer())->setRules(new ArrayObject($ruleTransfers));
+        }
+
+        return static::$ignoredRulesCache;
+    }
+
+    protected function isCacheShouldBeIgnored(UserTransfer $userTransfer): bool
+    {
+        /*
+        * HOTFIX from task FRW-9814: Bypass ACL cache for merchant agents to prevent token persistence issues
+        *
+        * Problem: Merchant agents may have incomplete token initialization during session restoration,
+        * causing the ACL cache to store incorrect "access denied" results. This happens because:
+        *
+        * Performance Impact: Minimal - only affects merchant agent users, regular users keep cache.
+        * Alternative: Complex conditional caching based on token state (more error-prone).
+        */
+        if (APPLICATION === 'MERCHANT_PORTAL' && $userTransfer->getIsMerchantAgent()) {
+            return true;
+        }
+
+        return false;
     }
 }

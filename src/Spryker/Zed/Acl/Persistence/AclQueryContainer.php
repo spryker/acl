@@ -13,6 +13,7 @@ use Orm\Zed\Acl\Persistence\Map\SpyAclGroupTableMap;
 use Orm\Zed\Acl\Persistence\Map\SpyAclRoleTableMap;
 use Orm\Zed\Acl\Persistence\Map\SpyAclRuleTableMap;
 use Orm\Zed\Acl\Persistence\Map\SpyAclUserHasGroupTableMap;
+use Orm\Zed\Acl\Persistence\SpyAclGroupsHasRolesQuery;
 use Orm\Zed\User\Persistence\Map\SpyUserTableMap;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\Join;
@@ -344,6 +345,23 @@ class AclQueryContainer extends AbstractQueryContainer implements AclQueryContai
     {
         $query = $this->getFactory()->createGroupHasRoleQuery();
         $query->filterByFkAclGroup($idGroup);
+
+        return $query;
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @api
+     *
+     * @param array $groupIds
+     *
+     * @return \Orm\Zed\Acl\Persistence\SpyAclGroupsHasRolesQuery
+     */
+    public function queryGroupHasRoles(array $groupIds): SpyAclGroupsHasRolesQuery
+    {
+        $query = $this->getFactory()->createGroupHasRoleQuery();
+        $query->filterByFkAclGroup_In($groupIds);
 
         return $query;
     }

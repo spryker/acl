@@ -23,6 +23,10 @@ class RuleValidator implements RuleValidatorInterface
      */
     protected $deniedRules = [];
 
+    protected array $allowedCompiled = [];
+
+    protected array $deniedCompiled = [];
+
     /**
      * @param array $rules
      * @param bool $condition
@@ -100,24 +104,16 @@ class RuleValidator implements RuleValidatorInterface
         }
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\RuleTransfer $rule
-     *
-     * @return int
-     */
-    protected function addAllowedRule(RuleTransfer $rule)
+    protected function addAllowedRule(RuleTransfer $rule): void
     {
-        return array_push($this->allowedRules, $rule);
+        $this->allowedRules[] = $rule;
+        $this->allowedCompiled[$rule->getBundle()][$rule->getController()][$rule->getAction()] = true;
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\RuleTransfer $rule
-     *
-     * @return int
-     */
-    protected function addDeniedRule(RuleTransfer $rule)
+    protected function addDeniedRule(RuleTransfer $rule): void
     {
-        return array_push($this->deniedRules, $rule);
+        $this->deniedRules[] = $rule;
+        $this->deniedCompiled[$rule->getBundle()][$rule->getController()][$rule->getAction()] = true;
     }
 
     /**
@@ -146,10 +142,63 @@ class RuleValidator implements RuleValidatorInterface
      */
     public function assert(RuleTransfer $rule, $bundle, $controller, $action)
     {
+        $wildcard = AclConstants::VALIDATOR_WILDCARD;
+
+        $ruleBundle = $rule->getBundle();
+        if ($ruleBundle !== $wildcard && $ruleBundle !== $bundle) {
+            return false;
+        }
+
+        $ruleController = $rule->getController();
+        if ($ruleController !== $wildcard && $ruleController !== $controller) {
+            return false;
+        }
+
+        $ruleAction = $rule->getAction();
+        if ($ruleAction !== $wildcard && $ruleAction !== $action) {
+            return false;
+        }
+
+        return true;
+    }
+
+    protected function isAssertDenied(string $bundle, string $controller, string $action): bool
+    {
+        if (isset($this->deniedCompiled[AclConstants::VALIDATOR_WILDCARD]) || isset($this->deniedCompiled[$bundle][$controller][$action])) {
+            return true;
+        }
+
+        if (isset($this->deniedCompiled[$bundle][AclConstants::VALIDATOR_WILDCARD])) {
+            return true;
+        }
+
+        if (isset($this->deniedCompiled[$bundle][$controller][AclConstants::VALIDATOR_WILDCARD])) {
+            return true;
+        }
+
+        return false;
+    }
+
+    protected function isAssertAllowed(string $bundle, string $controller, string $action): bool
+    {
+        $wildcard = AclConstants::VALIDATOR_WILDCARD;
+
+        if (isset($this->allowedCompiled[$bundle][$controller][$action]) || isset($this->allowedCompiled[$wildcard][$wildcard][$wildcard])) {
+            return true;
+        }
+
+        if (isset($this->allowedCompiled[$bundle][$controller][$wildcard])) {
+            return true;
+        }
+
+        if (isset($this->allowedCompiled[$bundle][$wildcard][$action]) || isset($this->allowedCompiled[$bundle][$wildcard][$wildcard])) {
+            return true;
+        }
+
         if (
-            ($rule->getBundle() === $bundle || $rule->getBundle() === AclConstants::VALIDATOR_WILDCARD) &&
-            ($rule->getController() === $controller || $rule->getController() === AclConstants::VALIDATOR_WILDCARD) &&
-            ($rule->getAction() === $action || $rule->getAction() === AclConstants::VALIDATOR_WILDCARD)
+            isset($this->allowedCompiled[$wildcard][$controller][$action])
+            || isset($this->allowedCompiled[$wildcard][$controller][$wildcard])
+            || isset($this->allowedCompiled[$wildcard][$wildcard][$action])
         ) {
             return true;
         }
@@ -166,16 +215,12 @@ class RuleValidator implements RuleValidatorInterface
      */
     public function isAccessible($bundle, $controller, $action)
     {
-        foreach ($this->getDeniedRules() as $rule) {
-            if ($this->assert($rule, $bundle, $controller, $action)) {
-                return false;
-            }
+        if ($this->isAssertDenied($bundle, $controller, $action)) {
+            return false;
         }
 
-        foreach ($this->getAllowedRules() as $rule) {
-            if ($this->assert($rule, $bundle, $controller, $action)) {
-                return true;
-            }
+        if ($this->isAssertAllowed($bundle, $controller, $action)) {
+            return true;
         }
 
         return false;

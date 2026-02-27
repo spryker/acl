@@ -62,6 +62,7 @@ class AclBusinessFactory extends AbstractBusinessFactory
             $this->getQueryContainer(),
             $this->getProvidedDependency(AclDependencyProvider::FACADE_USER),
             $this->createRuleValidatorHelper(),
+            $this->createRuleValidatorHelper(),
             $this->getConfig(),
             $this->getAclAccessCheckerStrategyPlugins(),
         );
