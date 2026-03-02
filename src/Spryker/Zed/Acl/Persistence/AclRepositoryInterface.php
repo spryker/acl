@@ -16,25 +16,10 @@ use Generated\Shared\Transfer\RoleTransfer;
 
 interface AclRepositoryInterface
 {
-    /**
-     * @param \Generated\Shared\Transfer\GroupCriteriaTransfer $groupCriteriaTransfer
-     *
-     * @return \Generated\Shared\Transfer\GroupTransfer|null
-     */
     public function findGroup(GroupCriteriaTransfer $groupCriteriaTransfer): ?GroupTransfer;
 
-    /**
-     * @param \Generated\Shared\Transfer\AclRoleCriteriaTransfer $aclRoleCriteriaTransfer
-     *
-     * @return \Generated\Shared\Transfer\RoleTransfer|null
-     */
     public function findRole(AclRoleCriteriaTransfer $aclRoleCriteriaTransfer): ?RoleTransfer;
 
-    /**
-     * @param \Generated\Shared\Transfer\AclUserHasGroupCriteriaTransfer $aclUserHasGroupCriteriaTransfer
-     *
-     * @return \Generated\Shared\Transfer\AclUserHasGroupCollectionTransfer
-     */
     public function getAclUserHasGroupCollection(
         AclUserHasGroupCriteriaTransfer $aclUserHasGroupCriteriaTransfer
     ): AclUserHasGroupCollectionTransfer;

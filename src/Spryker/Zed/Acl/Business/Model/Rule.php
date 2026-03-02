@@ -362,11 +362,6 @@ class Rule implements RuleInterface
         return $this->cachableIsAllowed($groupsTransfer, $userTransfer, $bundle, $controller, $action);
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\UserTransfer $userTransfer
-     *
-     * @return \Generated\Shared\Transfer\GroupsTransfer
-     */
     protected function getGroupsTransferByIdUser(UserTransfer $userTransfer): GroupsTransfer
     {
         $idUser = $userTransfer->getIdUser();
@@ -447,14 +442,6 @@ class Rule implements RuleInterface
         }
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\UserTransfer $userTransfer
-     * @param string $bundle
-     * @param string $controller
-     * @param string $action
-     *
-     * @return bool|null
-     */
     protected function executeAclAccessCheckerStrategyPlugins(
         UserTransfer $userTransfer,
         string $bundle,
@@ -475,9 +462,6 @@ class Rule implements RuleInterface
         return $isAllowed;
     }
 
-    /**
-     * @return \Generated\Shared\Transfer\RulesTransfer
-     */
     public function getIgnorableRules(): RulesTransfer
     {
         if (static::$ignoredRulesCache === null) {

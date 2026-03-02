@@ -36,9 +36,6 @@ class AccessControlEventDispatcherPluginTest extends Unit
      */
     protected $tester;
 
-    /**
-     * @return void
-     */
     public function testOnKernelRequestDoesNotRedirectWhenResourceIsIgnorable(): void
     {
         $this->tester->mockFacadeMethod('isIgnorable', true);
@@ -51,9 +48,6 @@ class AccessControlEventDispatcherPluginTest extends Unit
         $this->assertNull($event->getResponse());
     }
 
-    /**
-     * @return void
-     */
     public function testOnKernelRequestDoesNotRedirectWhenCurrentUserCanAccessResource(): void
     {
         $this->tester->mockFacadeMethod('hasCurrentUser', true);
@@ -69,9 +63,6 @@ class AccessControlEventDispatcherPluginTest extends Unit
         $this->assertNull($event->getResponse());
     }
 
-    /**
-     * @return void
-     */
     public function testOnKernelRequestRedirectsWhenCurrentUserIsNotExists(): void
     {
         $this->tester->mockFacadeMethod('hasCurrentUser', false);
@@ -85,9 +76,6 @@ class AccessControlEventDispatcherPluginTest extends Unit
         $this->assertInstanceOf(RedirectResponse::class, $event->getResponse());
     }
 
-    /**
-     * @return void
-     */
     public function testOnKernelRequestRedirectsWhenCurrentUserIsNotAllowedToAccessResource(): void
     {
         $this->tester->mockFacadeMethod('hasCurrentUser', true);
@@ -103,11 +91,6 @@ class AccessControlEventDispatcherPluginTest extends Unit
         $this->assertInstanceOf(RedirectResponse::class, $event->getResponse());
     }
 
-    /**
-     * @param \Spryker\Zed\Acl\Communication\Plugin\EventDispatcher\AccessControlEventDispatcherPlugin $accessControlEventDispatcherPlugin
-     *
-     * @return \Symfony\Component\HttpKernel\Event\RequestEvent
-     */
     protected function dispatchEvent(AccessControlEventDispatcherPlugin $accessControlEventDispatcherPlugin): RequestEvent
     {
         $eventDispatcher = new EventDispatcher();

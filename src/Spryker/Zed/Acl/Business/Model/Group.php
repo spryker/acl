@@ -28,9 +28,6 @@ class Group implements GroupInterface
      */
     protected $queryContainer;
 
-    /**
-     * @param \Spryker\Zed\Acl\Persistence\AclQueryContainerInterface $queryContainer
-     */
     public function __construct(AclQueryContainerInterface $queryContainer)
     {
         $this->queryContainer = $queryContainer;
@@ -211,12 +208,6 @@ class Group implements GroupInterface
         return $entity->save();
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\GroupTransfer $groupTransfer
-     * @param \Generated\Shared\Transfer\RolesTransfer $rolesTransfer
-     *
-     * @return void
-     */
     public function addRolesToGroup(GroupTransfer $groupTransfer, RolesTransfer $rolesTransfer): void
     {
         $this->removeRolesFromGroup($groupTransfer->getIdAclGroup());

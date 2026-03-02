@@ -11,10 +11,5 @@ use Generated\Shared\Transfer\RoleTransfer;
 
 interface RoleWriterInterface
 {
-    /**
-     * @param \Generated\Shared\Transfer\RoleTransfer $roleTransfer
-     *
-     * @return \Generated\Shared\Transfer\RoleTransfer
-     */
     public function createRole(RoleTransfer $roleTransfer): RoleTransfer;
 }

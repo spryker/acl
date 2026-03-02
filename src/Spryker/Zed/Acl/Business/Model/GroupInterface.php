@@ -126,12 +126,6 @@ interface GroupInterface
      */
     public function addRoleToGroup($idRole, $idGroup);
 
-    /**
-     * @param \Generated\Shared\Transfer\GroupTransfer $groupTransfer
-     * @param \Generated\Shared\Transfer\RolesTransfer $rolesTransfer
-     *
-     * @return void
-     */
     public function addRolesToGroup(GroupTransfer $groupTransfer, RolesTransfer $rolesTransfer): void;
 
     /**

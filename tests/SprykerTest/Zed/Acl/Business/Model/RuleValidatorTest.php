@@ -192,9 +192,6 @@ class RuleValidatorTest extends Unit
         $this->assertSame($expectedResult, $result);
     }
 
-    /**
-     * @return array
-     */
     public function isAccessibleWithAllowRulesDataProvider(): array
     {
         return [
@@ -271,9 +268,6 @@ class RuleValidatorTest extends Unit
         ];
     }
 
-    /**
-     * @return array
-     */
     public function isAccessibleWithDenyRulesDataProvider(): array
     {
         return [
@@ -340,9 +334,6 @@ class RuleValidatorTest extends Unit
         ];
     }
 
-    /**
-     * @return array
-     */
     public function isAccessibleWithWildcardsDataProvider(): array
     {
         return [
@@ -497,9 +488,6 @@ class RuleValidatorTest extends Unit
         ];
     }
 
-    /**
-     * @return array
-     */
     public function isAccessibleWithMixedRulesDataProvider(): array
     {
         return [
@@ -603,14 +591,6 @@ class RuleValidatorTest extends Unit
         ];
     }
 
-    /**
-     * @param string $type
-     * @param string $bundle
-     * @param string $controller
-     * @param string $action
-     *
-     * @return \Generated\Shared\Transfer\RuleTransfer
-     */
     protected function createRuleTransfer(string $type, string $bundle, string $controller, string $action): RuleTransfer
     {
         return (new RuleTransfer())

@@ -23,11 +23,6 @@ use SprykerTest\Zed\Acl\PageObject\AclRoleCreatePage;
  */
 class AclRoleCreateCest
 {
-    /**
-     * @param \SprykerTest\Zed\Acl\AclCommunicationTester $i
-     *
-     * @return void
-     */
     public function breadcrumbIsVisible(AclCommunicationTester $i): void
     {
         $i->amOnPage(AclRoleCreatePage::URL);

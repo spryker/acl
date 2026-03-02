@@ -28,9 +28,6 @@ class AclPresentationTester extends Actor
 {
     use _generated\AclPresentationTesterActions;
 
-    /**
-     * @param \Codeception\Scenario $scenario
-     */
     public function __construct(Scenario $scenario)
     {
         parent::__construct($scenario);

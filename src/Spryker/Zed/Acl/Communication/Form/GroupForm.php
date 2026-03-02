@@ -47,11 +47,6 @@ class GroupForm extends AbstractType
      */
     public const GROUP_UNIQUE_GROUP_CHECK = 'unique_group_check';
 
-    /**
-     * @param \Symfony\Component\OptionsResolver\OptionsResolver $resolver
-     *
-     * @return void
-     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setRequired(static::OPTION_ROLE_CHOICES);
@@ -154,9 +149,6 @@ class GroupForm extends AbstractType
         return $this->getBlockPrefix();
     }
 
-    /**
-     * @return string
-     */
     public function getBlockPrefix(): string
     {
         return 'group';

@@ -167,9 +167,6 @@ class AclCommunicationFactory extends AbstractCommunicationFactory
         return new RulesetTable($this->getQueryContainer(), $idAclRole);
     }
 
-    /**
-     * @return \Symfony\Component\Form\FormInterface
-     */
     public function createDeleteRoleForm(): FormInterface
     {
         return $this->getFormFactory()->create(DeleteRoleForm::class, [], [
@@ -177,9 +174,6 @@ class AclCommunicationFactory extends AbstractCommunicationFactory
         ]);
     }
 
-    /**
-     * @return \Spryker\Zed\Acl\Dependency\Facade\AclToRouterFacadeInterface
-     */
     public function getRouterFacade(): AclToRouterFacadeInterface
     {
         return $this->getProvidedDependency(AclDependencyProvider::FACADE_ROUTER);

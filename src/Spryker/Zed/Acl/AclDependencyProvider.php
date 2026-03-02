@@ -116,11 +116,6 @@ class AclDependencyProvider extends AbstractBundleDependencyProvider
         return $container;
     }
 
-    /**
-     * @param \Spryker\Zed\Kernel\Container $container
-     *
-     * @return \Spryker\Zed\Kernel\Container
-     */
     protected function addRouterFacade(Container $container): Container
     {
         $container->set(static::FACADE_ROUTER, function (Container $container): AclToRouterFacadeInterface {
@@ -159,11 +154,6 @@ class AclDependencyProvider extends AbstractBundleDependencyProvider
         return $container;
     }
 
-    /**
-     * @param \Spryker\Zed\Kernel\Container $container
-     *
-     * @return \Spryker\Zed\Kernel\Container
-     */
     protected function addAclInstallerPlugins(Container $container): Container
     {
         $container->set(static::ACL_INSTALLER_PLUGINS, function () {
@@ -181,11 +171,6 @@ class AclDependencyProvider extends AbstractBundleDependencyProvider
         return [];
     }
 
-    /**
-     * @param \Spryker\Zed\Kernel\Container $container
-     *
-     * @return \Spryker\Zed\Kernel\Container
-     */
     protected function addAclRolesExpanderPlugins(Container $container): Container
     {
         $container->set(static::PLUGINS_ACL_ROLES_EXPANDER, function () {
@@ -203,11 +188,6 @@ class AclDependencyProvider extends AbstractBundleDependencyProvider
         return [];
     }
 
-    /**
-     * @param \Spryker\Zed\Kernel\Container $container
-     *
-     * @return \Spryker\Zed\Kernel\Container
-     */
     protected function addAclRolePostSavePlugins(Container $container): Container
     {
         $container->set(static::PLUGINS_ACL_ROLE_POST_SAVE, function () {
@@ -225,11 +205,6 @@ class AclDependencyProvider extends AbstractBundleDependencyProvider
         return [];
     }
 
-    /**
-     * @param \Spryker\Zed\Kernel\Container $container
-     *
-     * @return \Spryker\Zed\Kernel\Container
-     */
     protected function addAclAccessCheckerStrategyPlugins(Container $container): Container
     {
         $container->set(static::PLUGINS_ACL_ACCESS_CHECKER_STRATEGY, function () {

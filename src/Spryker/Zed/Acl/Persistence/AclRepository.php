@@ -21,11 +21,6 @@ use Spryker\Zed\Kernel\Persistence\AbstractRepository;
  */
 class AclRepository extends AbstractRepository implements AclRepositoryInterface
 {
-    /**
-     * @param \Generated\Shared\Transfer\GroupCriteriaTransfer $groupCriteriaTransfer
-     *
-     * @return \Generated\Shared\Transfer\GroupTransfer|null
-     */
     public function findGroup(GroupCriteriaTransfer $groupCriteriaTransfer): ?GroupTransfer
     {
         $aclGroupQuery = $this->getFactory()
@@ -43,11 +38,6 @@ class AclRepository extends AbstractRepository implements AclRepositoryInterface
             ->mapAclGroupEntityToGroupTransfer($aclGroupEntity, new GroupTransfer());
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\AclRoleCriteriaTransfer $aclRoleCriteriaTransfer
-     *
-     * @return \Generated\Shared\Transfer\RoleTransfer|null
-     */
     public function findRole(AclRoleCriteriaTransfer $aclRoleCriteriaTransfer): ?RoleTransfer
     {
         $aclRoleQuery = $this->getFactory()
@@ -65,11 +55,6 @@ class AclRepository extends AbstractRepository implements AclRepositoryInterface
             ->mapAclRoleEntityToRoleTransfer($aclRoleEntity, new RoleTransfer());
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\AclUserHasGroupCriteriaTransfer $aclUserHasGroupCriteriaTransfer
-     *
-     * @return \Generated\Shared\Transfer\AclUserHasGroupCollectionTransfer
-     */
     public function getAclUserHasGroupCollection(
         AclUserHasGroupCriteriaTransfer $aclUserHasGroupCriteriaTransfer
     ): AclUserHasGroupCollectionTransfer {
@@ -84,12 +69,6 @@ class AclRepository extends AbstractRepository implements AclRepositoryInterface
             );
     }
 
-    /**
-     * @param \Orm\Zed\Acl\Persistence\SpyAclUserHasGroupQuery $aclUserHasGroupQuery
-     * @param \Generated\Shared\Transfer\AclUserHasGroupCriteriaTransfer $aclUserHasGroupCriteriaTransfer
-     *
-     * @return \Orm\Zed\Acl\Persistence\SpyAclUserHasGroupQuery
-     */
     protected function applyAclUserHasGroupFilters(
         SpyAclUserHasGroupQuery $aclUserHasGroupQuery,
         AclUserHasGroupCriteriaTransfer $aclUserHasGroupCriteriaTransfer

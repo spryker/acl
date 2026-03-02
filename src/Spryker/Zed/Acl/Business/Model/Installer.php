@@ -94,9 +94,6 @@ class Installer implements InstallerInterface
         $this->installUserGroupRelations();
     }
 
-    /**
-     * @return void
-     */
     protected function installGroups(): void
     {
         foreach ($this->getGroups() as $groupTransfer) {
@@ -108,9 +105,6 @@ class Installer implements InstallerInterface
         }
     }
 
-    /**
-     * @return void
-     */
     protected function installRoles(): void
     {
         foreach ($this->getRoles() as $roleTransfer) {
@@ -149,12 +143,6 @@ class Installer implements InstallerInterface
         return $roleTransfer;
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\RuleTransfer $ruleTransfer
-     * @param \Generated\Shared\Transfer\RoleTransfer $roleTransfer
-     *
-     * @return \Generated\Shared\Transfer\RuleTransfer
-     */
     protected function addRuleToRole(RuleTransfer $ruleTransfer, RoleTransfer $roleTransfer): RuleTransfer
     {
         $ruleTransfer->requireAction()

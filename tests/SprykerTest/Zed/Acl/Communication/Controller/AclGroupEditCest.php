@@ -23,11 +23,6 @@ use SprykerTest\Zed\Acl\PageObject\AclGroupListPage;
  */
 class AclGroupEditCest
 {
-    /**
-     * @param \SprykerTest\Zed\Acl\AclCommunicationTester $i
-     *
-     * @return void
-     */
     public function breadcrumbIsVisible(AclCommunicationTester $i): void
     {
         $i->listDataTable(AclGroupListPage::URL . '/table');

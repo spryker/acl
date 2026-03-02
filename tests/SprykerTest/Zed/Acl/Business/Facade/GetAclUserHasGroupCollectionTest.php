@@ -30,9 +30,6 @@ class GetAclUserHasGroupCollectionTest extends Unit
      */
     protected AclBusinessTester $tester;
 
-    /**
-     * @return void
-     */
     public function setUp(): void
     {
         parent::setUp();
@@ -75,9 +72,6 @@ class GetAclUserHasGroupCollectionTest extends Unit
         );
     }
 
-    /**
-     * @return void
-     */
     public function testFiltersByUserIds(): void
     {
         // Arrange
@@ -103,9 +97,6 @@ class GetAclUserHasGroupCollectionTest extends Unit
         );
     }
 
-    /**
-     * @return void
-     */
     public function testFiltersByAclGroupName(): void
     {
         // Arrange

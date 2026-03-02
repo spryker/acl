@@ -25,21 +25,12 @@ class NavigationItemFilter implements NavigationItemFilterInterface
      */
     protected $userFacade;
 
-    /**
-     * @param \Spryker\Zed\Acl\Business\Model\RuleInterface $rule
-     * @param \Spryker\Zed\Acl\Dependency\Facade\AclToUserInterface $userFacade
-     */
     public function __construct(RuleInterface $rule, AclToUserInterface $userFacade)
     {
         $this->rule = $rule;
         $this->userFacade = $userFacade;
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\NavigationItemCollectionTransfer $navigationItemCollectionTransfer
-     *
-     * @return \Generated\Shared\Transfer\NavigationItemCollectionTransfer
-     */
     public function filterNavigationItemCollectionByAccessibility(
         NavigationItemCollectionTransfer $navigationItemCollectionTransfer
     ): NavigationItemCollectionTransfer {
@@ -73,11 +64,6 @@ class NavigationItemFilter implements NavigationItemFilterInterface
         );
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\NavigationItemTransfer $navigationItemTransfer
-     *
-     * @return bool
-     */
     protected function isNavigationItemTransferValidForAclAccessCheck(
         NavigationItemTransfer $navigationItemTransfer
     ): bool {

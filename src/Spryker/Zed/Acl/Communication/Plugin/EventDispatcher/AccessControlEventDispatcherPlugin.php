@@ -43,11 +43,6 @@ class AccessControlEventDispatcherPlugin extends AbstractPlugin implements Event
         return $eventDispatcher;
     }
 
-    /**
-     * @param \Symfony\Component\HttpKernel\Event\RequestEvent $event
-     *
-     * @return \Symfony\Component\HttpKernel\Event\RequestEvent
-     */
     protected function onKernelRequest(RequestEvent $event): RequestEvent
     {
         $aclFacade = $this->getFacade();
@@ -72,11 +67,6 @@ class AccessControlEventDispatcherPlugin extends AbstractPlugin implements Event
         return $event;
     }
 
-    /**
-     * @param \Symfony\Component\HttpKernel\Event\RequestEvent $event
-     *
-     * @return bool
-     */
     protected function isMainRequest(RequestEvent $event): bool
     {
         if (method_exists($event, 'isMasterRequest')) {

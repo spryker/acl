@@ -32,9 +32,6 @@ class GroupTableQueryTest extends Unit
      */
     protected $tester;
 
-    /**
-     * @return void
-     */
     public function testFetchDataCollectsCorrectAclGroups(): void
     {
         // Arrange

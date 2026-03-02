@@ -29,12 +29,6 @@ class AclBusinessTester extends Actor
 {
     use _generated\AclBusinessTesterActions;
 
-    /**
-     * @param int $idUser
-     * @param int $idAclGroup
-     *
-     * @return void
-     */
     public function haveAclUserHasGroup(int $idUser, int $idAclGroup): void
     {
         (new SpyAclUserHasGroup())
@@ -43,17 +37,11 @@ class AclBusinessTester extends Actor
             ->save();
     }
 
-    /**
-     * @return void
-     */
     public function ensureAclUserHasGroupTableIsEmpty(): void
     {
         $this->getAclUserHasGroupQuery()->deleteAll();
     }
 
-    /**
-     * @return \Orm\Zed\Acl\Persistence\SpyAclUserHasGroupQuery
-     */
     protected function getAclUserHasGroupQuery(): SpyAclUserHasGroupQuery
     {
         return SpyAclUserHasGroupQuery::create();

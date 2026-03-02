@@ -13,23 +13,9 @@ use Generated\Shared\Transfer\RouterControllerCollectionTransfer;
 
 interface AclToRouterFacadeInterface
 {
-    /**
-     * @return \Generated\Shared\Transfer\RouterBundleCollectionTransfer
-     */
     public function getRouterBundleCollection(): RouterBundleCollectionTransfer;
 
-    /**
-     * @param string $bundle
-     *
-     * @return \Generated\Shared\Transfer\RouterControllerCollectionTransfer
-     */
     public function getRouterControllerCollection(string $bundle): RouterControllerCollectionTransfer;
 
-    /**
-     * @param string $bundle
-     * @param string $controller
-     *
-     * @return \Generated\Shared\Transfer\RouterActionCollectionTransfer
-     */
     public function getRouterActionCollection(string $bundle, string $controller): RouterActionCollectionTransfer;
 }

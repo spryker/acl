@@ -12,17 +12,7 @@ use Generated\Shared\Transfer\RoleTransfer;
 
 interface AclEntityManagerInterface
 {
-    /**
-     * @param \Generated\Shared\Transfer\GroupTransfer $groupTransfer
-     *
-     * @return \Generated\Shared\Transfer\GroupTransfer
-     */
     public function createGroup(GroupTransfer $groupTransfer): GroupTransfer;
 
-    /**
-     * @param \Generated\Shared\Transfer\RoleTransfer $roleTransfer
-     *
-     * @return \Generated\Shared\Transfer\RoleTransfer
-     */
     public function createRole(RoleTransfer $roleTransfer): RoleTransfer;
 }

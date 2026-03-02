@@ -26,30 +26,16 @@ class AclToRouterFacadeBridge implements AclToRouterFacadeInterface
         $this->routerFacade = $routerFacade;
     }
 
-    /**
-     * @return \Generated\Shared\Transfer\RouterBundleCollectionTransfer
-     */
     public function getRouterBundleCollection(): RouterBundleCollectionTransfer
     {
         return $this->routerFacade->getRouterBundleCollection();
     }
 
-    /**
-     * @param string $bundle
-     *
-     * @return \Generated\Shared\Transfer\RouterControllerCollectionTransfer
-     */
     public function getRouterControllerCollection(string $bundle): RouterControllerCollectionTransfer
     {
         return $this->routerFacade->getRouterControllerCollection($bundle);
     }
 
-    /**
-     * @param string $bundle
-     * @param string $controller
-     *
-     * @return \Generated\Shared\Transfer\RouterActionCollectionTransfer
-     */
     public function getRouterActionCollection(string $bundle, string $controller): RouterActionCollectionTransfer
     {
         return $this->routerFacade->getRouterActionCollection($bundle, $controller);

@@ -34,11 +34,6 @@ class RulesController extends AbstractController
      */
     protected const ROOT_ACCESS = '*';
 
-    /**
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     *
-     * @return \Symfony\Component\HttpFoundation\JsonResponse
-     */
     public function controllerChoicesAction(Request $request): JsonResponse
     {
         $bundle = (string)$request->query->get(static::BUNDLE_FIELD);
@@ -53,11 +48,6 @@ class RulesController extends AbstractController
         return $this->jsonResponse(array_combine($choices, $choices));
     }
 
-    /**
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     *
-     * @return \Symfony\Component\HttpFoundation\JsonResponse
-     */
     public function actionChoicesAction(Request $request): JsonResponse
     {
         $bundle = (string)$request->query->get(static::BUNDLE_FIELD);

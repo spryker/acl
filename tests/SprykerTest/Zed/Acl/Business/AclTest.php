@@ -71,9 +71,6 @@ class AclTest extends Unit
      */
     protected $tester;
 
-    /**
-     * @return void
-     */
     public function setUp(): void
     {
         parent::setUp();
@@ -85,9 +82,6 @@ class AclTest extends Unit
         $this->userFacade = new UserFacade();
     }
 
-    /**
-     * @return void
-     */
     protected function clearRuleStaticCache(): void
     {
         $ruleClass = new ReflectionClass(Rule::class);
@@ -111,9 +105,6 @@ class AclTest extends Unit
         $ruleValidatorProperty->setValue(null);
     }
 
-    /**
-     * @return array
-     */
     private function mockGroupData(): array
     {
         $data = [];
@@ -123,9 +114,6 @@ class AclTest extends Unit
         return $data;
     }
 
-    /**
-     * @return array
-     */
     private function mockRoleData(): array
     {
         $data = [];
@@ -135,12 +123,6 @@ class AclTest extends Unit
         return $data;
     }
 
-    /**
-     * @param string $type
-     * @param int $idRole
-     *
-     * @return array
-     */
     private function mockRuleData(string $type, int $idRole): array
     {
         $data = [];
@@ -154,9 +136,6 @@ class AclTest extends Unit
         return $data;
     }
 
-    /**
-     * @return array
-     */
     private function mockUserData(): array
     {
         $data = [];
@@ -179,9 +158,6 @@ class AclTest extends Unit
         return $this->userFacade->addUser($data['firstName'], $data['lastName'], $data['username'], $data['password']);
     }
 
-    /**
-     * @return void
-     */
     public function testAddGroup(): void
     {
         $data = $this->mockGroupData();
@@ -193,9 +169,6 @@ class AclTest extends Unit
         $this->assertSame($data['name'], $transfer->getName());
     }
 
-    /**
-     * @return void
-     */
     public function testFindGroupReturnsTransferWithCorrectData(): void
     {
         // Arrange
@@ -209,9 +182,6 @@ class AclTest extends Unit
         $this->assertSame($groupTransfer->getReference(), $foundGroupTransfer->getReference());
     }
 
-    /**
-     * @return void
-     */
     public function testFindGroupReturnsNullWithIncorrectData(): void
     {
         // Arrange
@@ -224,9 +194,6 @@ class AclTest extends Unit
         $this->assertNull($foundGroupTransfer);
     }
 
-    /**
-     * @return void
-     */
     public function testUpdateGroup(): void
     {
         $groupName1 = 'test-group-19998';
@@ -244,9 +211,6 @@ class AclTest extends Unit
         $this->assertSame($groupName2, $dto2->getName());
     }
 
-    /**
-     * @return void
-     */
     public function testGetGroupById(): void
     {
         $groupData = $this->mockGroupData();
@@ -264,9 +228,6 @@ class AclTest extends Unit
         $this->assertSame($groupData['name'], $groupDto->getName());
     }
 
-    /**
-     * @return void
-     */
     public function testRemoveGroup(): void
     {
         $groupData = $this->mockGroupData();
@@ -282,9 +243,6 @@ class AclTest extends Unit
         }
     }
 
-    /**
-     * @return void
-     */
     public function testAddRole(): void
     {
         $roleData = $this->mockRoleData();
@@ -297,9 +255,6 @@ class AclTest extends Unit
         $this->assertSame($roleData['name'], $roleDto->getName());
     }
 
-    /**
-     * @return void
-     */
     public function testUpdatesRole(): void
     {
         $roleData = $this->mockRoleData();
@@ -311,9 +266,6 @@ class AclTest extends Unit
         $this->assertSame($roleData['name'], $roleTransfer->getName());
     }
 
-    /**
-     * @return void
-     */
     public function testRoleNameUniquenessCheck(): void
     {
         $roleData = $this->mockRoleData();
@@ -326,9 +278,6 @@ class AclTest extends Unit
         $this->facade->addRole($roleName);
     }
 
-    /**
-     * @return void
-     */
     public function testRoleNameShouldNotBeEmpty(): void
     {
         $this->expectException(RoleNameEmptyException::class);
@@ -337,9 +286,6 @@ class AclTest extends Unit
         $this->facade->addRole('');
     }
 
-    /**
-     * @return void
-     */
     public function testRootRoleIsNotAllowedToEdit(): void
     {
         $roleTransfer = $this->facade->getRoleByName(AclConstants::ROOT_ROLE);
@@ -350,9 +296,6 @@ class AclTest extends Unit
         $this->facade->updateRole($roleTransfer);
     }
 
-    /**
-     * @return void
-     */
     public function testRemoveRole(): void
     {
         $roleData = $this->mockRoleData();
@@ -370,9 +313,6 @@ class AclTest extends Unit
         }
     }
 
-    /**
-     * @return void
-     */
     public function testAddRoleAndIsPresentInGroup(): void
     {
         $groupData = $this->mockGroupData();
@@ -385,9 +325,6 @@ class AclTest extends Unit
         $this->assertSame($roleData['name'], $transferRole->getName());
     }
 
-    /**
-     * @return void
-     */
     public function testAddRuleAndAddToRole(): void
     {
         $groupData = $this->mockGroupData();
@@ -415,9 +352,6 @@ class AclTest extends Unit
         }
     }
 
-    /**
-     * @return void
-     */
     public function testGetRulesFromRoles(): void
     {
         $roleData = $this->mockRoleData();
@@ -442,9 +376,6 @@ class AclTest extends Unit
         }
     }
 
-    /**
-     * @return void
-     */
     public function testGetRulesFromGroup(): void
     {
         $groupData = $this->mockGroupData();
@@ -471,9 +402,6 @@ class AclTest extends Unit
         }
     }
 
-    /**
-     * @return void
-     */
     public function testRemoveRule(): void
     {
         $roleData = $this->mockRoleData();
@@ -499,9 +427,6 @@ class AclTest extends Unit
         }
     }
 
-    /**
-     * @return void
-     */
     public function testAddUserToGroup(): void
     {
         $groupData = $this->mockGroupData();
@@ -513,9 +438,6 @@ class AclTest extends Unit
         $this->assertSame(1, $added);
     }
 
-    /**
-     * @return void
-     */
     public function testGetUserGroups(): void
     {
         $groupData = $this->mockGroupData();
@@ -542,9 +464,6 @@ class AclTest extends Unit
         $this->assertSame($groupData['name'], $group['name']);
     }
 
-    /**
-     * @return void
-     */
     public function testCheckPermissionSimple(): void
     {
         $groupData = $this->mockGroupData();
@@ -578,9 +497,6 @@ class AclTest extends Unit
         }
     }
 
-    /**
-     * @return void
-     */
     public function testCheckPermissionSimpleHasNoAccess(): void
     {
         $groupData = $this->mockGroupData();
@@ -610,9 +526,6 @@ class AclTest extends Unit
         }
     }
 
-    /**
-     * @return void
-     */
     public function testCheckPermissionWildcards(): void
     {
         $groupData = $this->mockGroupData();
@@ -648,9 +561,6 @@ class AclTest extends Unit
         }
     }
 
-    /**
-     * @return void
-     */
     public function testPermissionsWithSystemUser(): void
     {
         $systemUsers = $this->userFacade->getSystemUsers();
@@ -668,9 +578,6 @@ class AclTest extends Unit
         }
     }
 
-    /**
-     * @return void
-     */
     public function testPermissionsWithSystemUserShouldNotAllow(): void
     {
         $systemUsers = $this->userFacade->getSystemUsers();
@@ -688,9 +595,6 @@ class AclTest extends Unit
         }
     }
 
-    /**
-     * @return void
-     */
     public function testFilterNavigationItemCollectionByAccessibilityReturnsFilteredCollectionWithCorrectData(): void
     {
         // Arrange
@@ -746,9 +650,6 @@ class AclTest extends Unit
         $this->assertArrayHasKey('empty-navigation-item', $navigationItemCollectionTransfer->getNavigationItems());
     }
 
-    /**
-     * @return void
-     */
     public function testFilterNavigationItemCollectionByAccessibilityReturnsEmptyCollectionIfUserIsUnauthorized(): void
     {
         // Arrange
@@ -805,11 +706,6 @@ class AclTest extends Unit
         return $aclToUserBridge;
     }
 
-    /**
-     * @param array $seedData
-     *
-     * @return \Generated\Shared\Transfer\NavigationItemTransfer
-     */
     protected function getNavigationItemTransfer(array $seedData): NavigationItemTransfer
     {
         return (new NavigationItemBuilder($seedData))->build();

@@ -49,9 +49,6 @@ class AclPersistenceFactory extends AbstractPersistenceFactory
         return SpyAclRoleQuery::create();
     }
 
-    /**
-     * @return \Spryker\Zed\Acl\Persistence\Propel\Mapper\AclMapper
-     */
     public function createAclMapper(): AclMapper
     {
         return new AclMapper();

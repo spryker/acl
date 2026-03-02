@@ -19,12 +19,6 @@ use Propel\Runtime\Collection\Collection;
 
 class AclMapper
 {
-    /**
-     * @param \Orm\Zed\Acl\Persistence\SpyAclGroup $aclGroup
-     * @param \Generated\Shared\Transfer\GroupTransfer $groupTransfer
-     *
-     * @return \Generated\Shared\Transfer\GroupTransfer
-     */
     public function mapAclGroupEntityToGroupTransfer(SpyAclGroup $aclGroup, GroupTransfer $groupTransfer): GroupTransfer
     {
         $groupTransfer->fromArray($aclGroup->toArray(), true);
@@ -32,12 +26,6 @@ class AclMapper
         return $groupTransfer;
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\GroupTransfer $groupTransfer
-     * @param \Orm\Zed\Acl\Persistence\SpyAclGroup $aclGroupEntity
-     *
-     * @return \Orm\Zed\Acl\Persistence\SpyAclGroup
-     */
     public function mapAclGroupTransferToGroupEntity(GroupTransfer $groupTransfer, SpyAclGroup $aclGroupEntity): SpyAclGroup
     {
         $aclGroupEntity->fromArray($groupTransfer->toArray());
@@ -45,12 +33,6 @@ class AclMapper
         return $aclGroupEntity;
     }
 
-    /**
-     * @param \Orm\Zed\Acl\Persistence\SpyAclRole $aclRoleEntity
-     * @param \Generated\Shared\Transfer\RoleTransfer $roleTransfer
-     *
-     * @return \Generated\Shared\Transfer\RoleTransfer
-     */
     public function mapAclRoleEntityToRoleTransfer(SpyAclRole $aclRoleEntity, RoleTransfer $roleTransfer): RoleTransfer
     {
         $roleTransfer->fromArray($aclRoleEntity->toArray(), true);
@@ -58,12 +40,6 @@ class AclMapper
         return $roleTransfer;
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\RoleTransfer $roleTransfer
-     * @param \Orm\Zed\Acl\Persistence\SpyAclRole $aclRoleEntity
-     *
-     * @return \Orm\Zed\Acl\Persistence\SpyAclRole
-     */
     public function mapAclRoleTransferToRoleEntity(RoleTransfer $roleTransfer, SpyAclRole $aclRoleEntity): SpyAclRole
     {
         $aclRoleEntity->fromArray($roleTransfer->toArray());
@@ -93,12 +69,6 @@ class AclMapper
         return $aclUserHasGroupCollectionTransfer;
     }
 
-    /**
-     * @param \Orm\Zed\Acl\Persistence\SpyAclUserHasGroup $aclUserHasGroupEntity
-     * @param \Generated\Shared\Transfer\AclUserHasGroupTransfer $aclUserHasGroupTransfer
-     *
-     * @return \Generated\Shared\Transfer\AclUserHasGroupTransfer
-     */
     protected function mapAclUserHasGroupEntityToAclUserHasGroupTransfer(
         SpyAclUserHasGroup $aclUserHasGroupEntity,
         AclUserHasGroupTransfer $aclUserHasGroupTransfer

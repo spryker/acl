@@ -68,11 +68,6 @@ class RuleForm extends AbstractType
      */
     public const ACTION_FIELD_CHOICES = 'action_field_choices';
 
-    /**
-     * @param \Symfony\Component\OptionsResolver\OptionsResolver $resolver
-     *
-     * @return void
-     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver
@@ -227,9 +222,6 @@ class RuleForm extends AbstractType
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getBlockPrefix(): string
     {
         return 'ruleset';

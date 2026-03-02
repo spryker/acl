@@ -17,9 +17,6 @@ class AclGroupFormDataProvider
      */
     protected $queryContainer;
 
-    /**
-     * @param \Spryker\Zed\Acl\Persistence\AclQueryContainerInterface $queryContainer
-     */
     public function __construct(AclQueryContainerInterface $queryContainer)
     {
         $this->queryContainer = $queryContainer;

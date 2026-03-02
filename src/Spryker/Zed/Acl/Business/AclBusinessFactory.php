@@ -68,9 +68,6 @@ class AclBusinessFactory extends AbstractBusinessFactory
         );
     }
 
-    /**
-     * @return \Spryker\Zed\Acl\Business\Filter\NavigationItemFilterInterface
-     */
     public function createNavigationItemFilter(): NavigationItemFilterInterface
     {
         return new NavigationItemFilter(
@@ -79,9 +76,6 @@ class AclBusinessFactory extends AbstractBusinessFactory
         );
     }
 
-    /**
-     * @return \Spryker\Zed\Acl\Business\Acl\AclConfigReaderInterface
-     */
     public function createAclConfigReader(): AclConfigReaderInterface
     {
         return new AclConfigReader($this->getConfig());
@@ -111,9 +105,6 @@ class AclBusinessFactory extends AbstractBusinessFactory
         );
     }
 
-    /**
-     * @return \Spryker\Zed\Acl\Business\Writer\GroupWriterInterface
-     */
     public function createGroupWriter(): GroupWriterInterface
     {
         return new GroupWriter(
@@ -122,9 +113,6 @@ class AclBusinessFactory extends AbstractBusinessFactory
         );
     }
 
-    /**
-     * @return \Spryker\Zed\Acl\Business\Writer\RoleWriterInterface
-     */
     public function createRoleWriter(): RoleWriterInterface
     {
         return new RoleWriter(

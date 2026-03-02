@@ -23,11 +23,6 @@ class AclHelper extends Module
 {
     use LocatorHelperTrait;
 
-    /**
-     * @param array $seedData
-     *
-     * @return \Generated\Shared\Transfer\GroupTransfer
-     */
     public function haveGroup(array $seedData = []): GroupTransfer
     {
         /** @var \Generated\Shared\Transfer\GroupTransfer $groupTransfer */
@@ -42,11 +37,6 @@ class AclHelper extends Module
         return $groupTransfer;
     }
 
-    /**
-     * @param array $seedData
-     *
-     * @return \Generated\Shared\Transfer\RoleTransfer
-     */
     public function haveRole(array $seedData = []): RoleTransfer
     {
         /** @var \Generated\Shared\Transfer\RoleTransfer $roleTransfer */
@@ -60,12 +50,6 @@ class AclHelper extends Module
         return $roleTransfer;
     }
 
-    /**
-     * @param int $idUser
-     * @param int $idGroup
-     *
-     * @return int
-     */
     public function addUserToGroup(int $idUser, int $idGroup): int
     {
         return $this->getLocator()
@@ -74,11 +58,6 @@ class AclHelper extends Module
             ->addUserToGroup($idUser, $idGroup);
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\AclRoleCriteriaTransfer $aclRoleCriteriaTransfer
-     *
-     * @return void
-     */
     public function deleteRoles(AclRoleCriteriaTransfer $aclRoleCriteriaTransfer): void
     {
         $aclRoleQuery = $this->getAclRoleQuery();
@@ -94,11 +73,6 @@ class AclHelper extends Module
         $aclRoleQuery->delete();
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\GroupCriteriaTransfer $groupCriteriaTransfer
-     *
-     * @return void
-     */
     public function deleteGroups(GroupCriteriaTransfer $groupCriteriaTransfer): void
     {
         $aclGroupQuery = $this->getAclGroupQuery();
@@ -116,41 +90,26 @@ class AclHelper extends Module
         $aclGroupQuery->delete();
     }
 
-    /**
-     * @return void
-     */
     public function ensureAclRoleTableIsEmpty(): void
     {
         SpyAclRoleQuery::create()->deleteAll();
     }
 
-    /**
-     * @return void
-     */
     public function ensureAclGroupTableIsEmpty(): void
     {
         SpyAclGroupQuery::create()->deleteAll();
     }
 
-    /**
-     * @return \Orm\Zed\Acl\Persistence\SpyAclGroup
-     */
     private function createAclGroupEntity(): SpyAclGroup
     {
         return new SpyAclGroup();
     }
 
-    /**
-     * @return \Orm\Zed\Acl\Persistence\SpyAclRoleQuery
-     */
     protected function getAclRoleQuery(): SpyAclRoleQuery
     {
         return SpyAclRoleQuery::create();
     }
 
-    /**
-     * @return \Orm\Zed\Acl\Persistence\SpyAclGroupQuery
-     */
     protected function getAclGroupQuery(): SpyAclGroupQuery
     {
         return SpyAclGroupQuery::create();

@@ -220,11 +220,6 @@ class Role implements RoleInterface
         return $roleTransfer;
     }
 
-    /**
-     * @param int $id
-     *
-     * @return \Generated\Shared\Transfer\RoleTransfer|null
-     */
     public function findRoleById(int $id): ?RoleTransfer
     {
         $aclRoleEntity = $this->queryContainer->queryRoleById($id)->findOne();
@@ -276,11 +271,6 @@ class Role implements RoleInterface
         return $roleTransfer;
     }
 
-    /**
-     * @param string $name
-     *
-     * @return \Generated\Shared\Transfer\RoleTransfer|null
-     */
     public function findRoleByName(string $name): ?RoleTransfer
     {
         if (!$this->hasRoleName($name)) {
@@ -290,11 +280,6 @@ class Role implements RoleInterface
         return $this->getByName($name);
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\RolesTransfer $rolesTransfer
-     *
-     * @return \Generated\Shared\Transfer\RolesTransfer
-     */
     protected function executeAclRolesExpanderPlugins(RolesTransfer $rolesTransfer): RolesTransfer
     {
         foreach ($this->aclRolesExpanderPlugins as $aclRolesExpanderPlugin) {
@@ -304,11 +289,6 @@ class Role implements RoleInterface
         return $rolesTransfer;
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\RoleTransfer $roleTransfer
-     *
-     * @return \Generated\Shared\Transfer\RoleTransfer
-     */
     protected function executeAclRolPostSavePlugins(RoleTransfer $roleTransfer): RoleTransfer
     {
         foreach ($this->aclRolePostSavePlugins as $aclRolePostSavePlugin) {

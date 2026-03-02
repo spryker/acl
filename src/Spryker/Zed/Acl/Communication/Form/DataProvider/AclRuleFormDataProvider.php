@@ -30,10 +30,6 @@ class AclRuleFormDataProvider
      */
     protected $routerFacade;
 
-    /**
-     * @param \Spryker\Zed\Acl\Business\AclFacade $aclFacade
-     * @param \Spryker\Zed\Acl\Dependency\Facade\AclToRouterFacadeInterface $routerFacade
-     */
     public function __construct(AclFacade $aclFacade, AclToRouterFacadeInterface $routerFacade)
     {
         $this->aclFacade = $aclFacade;

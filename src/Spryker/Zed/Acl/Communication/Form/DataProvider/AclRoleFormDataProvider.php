@@ -16,9 +16,6 @@ class AclRoleFormDataProvider
      */
     protected $aclFacade;
 
-    /**
-     * @param \Spryker\Zed\Acl\Business\AclFacade $aclFacade
-     */
     public function __construct(AclFacade $aclFacade)
     {
         $this->aclFacade = $aclFacade;

@@ -71,11 +71,6 @@ class RoleWriter implements RoleWriterInterface
         return $roleTransfer;
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\RoleTransfer $roleTransfer
-     *
-     * @return string
-     */
     protected function createRoleExceptionMessage(RoleTransfer $roleTransfer): string
     {
         $exceptionMesaageParameters = [];
@@ -93,11 +88,6 @@ class RoleWriter implements RoleWriterInterface
         return $exceptionMesaage;
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\RoleTransfer $roleTransfer
-     *
-     * @return \Generated\Shared\Transfer\RoleTransfer
-     */
     protected function executeAclRolPostSavePlugins(RoleTransfer $roleTransfer): RoleTransfer
     {
         foreach ($this->aclRolePostSavePlugins as $aclRolePostSavePlugin) {

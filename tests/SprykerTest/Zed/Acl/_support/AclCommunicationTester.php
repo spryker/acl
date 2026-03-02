@@ -31,17 +31,11 @@ class AclCommunicationTester extends Actor
 {
     use _generated\AclCommunicationTesterActions;
 
-    /**
-     * @return \Symfony\Component\HttpKernel\Event\RequestEvent
-     */
     public function getRequestEvent(): RequestEvent
     {
         return new RequestEvent($this->getHttpKernelMock(), Request::createFromGlobals(), HttpKernelInterface::MASTER_REQUEST);
     }
 
-    /**
-     * @return \Symfony\Component\HttpKernel\HttpKernelInterface
-     */
     protected function getHttpKernelMock(): HttpKernelInterface
     {
         /** @var \Symfony\Component\HttpKernel\HttpKernelInterface $httpKernelMock */

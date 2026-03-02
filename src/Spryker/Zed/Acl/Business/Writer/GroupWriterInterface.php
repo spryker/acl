@@ -11,10 +11,5 @@ use Generated\Shared\Transfer\GroupTransfer;
 
 interface GroupWriterInterface
 {
-    /**
-     * @param \Generated\Shared\Transfer\GroupTransfer $groupTransfer
-     *
-     * @return \Generated\Shared\Transfer\GroupTransfer
-     */
     public function createGroup(GroupTransfer $groupTransfer): GroupTransfer;
 }

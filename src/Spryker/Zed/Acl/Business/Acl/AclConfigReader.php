@@ -30,9 +30,6 @@ class AclConfigReader implements AclConfigReaderInterface
      */
     protected $aclConfig;
 
-    /**
-     * @param \Spryker\Zed\Acl\AclConfig $aclConfig
-     */
     public function __construct(AclConfig $aclConfig)
     {
         $this->aclConfig = $aclConfig;

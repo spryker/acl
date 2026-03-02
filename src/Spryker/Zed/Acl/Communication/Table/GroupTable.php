@@ -47,10 +47,6 @@ class GroupTable extends AbstractTable
      */
     protected $utilDateTimeService;
 
-    /**
-     * @param \Orm\Zed\Acl\Persistence\SpyAclGroupQuery $aclGroupQuery
-     * @param \Spryker\Service\UtilDateTime\UtilDateTimeServiceInterface $utilDateTimeService
-     */
     public function __construct(SpyAclGroupQuery $aclGroupQuery, UtilDateTimeServiceInterface $utilDateTimeService)
     {
         $this->aclGroupQuery = $aclGroupQuery;
@@ -113,11 +109,6 @@ class GroupTable extends AbstractTable
         return $groups;
     }
 
-    /**
-     * @param string $groupName
-     *
-     * @return string
-     */
     protected function prepareGroupName(string $groupName): string
     {
         return $groupName !== AclConstants::ROOT_GROUP ? $groupName : sprintf(static::ROOT_GROUP_VISIBLE_NAME, AclConstants::ROOT_GROUP);

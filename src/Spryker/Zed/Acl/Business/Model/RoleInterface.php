@@ -46,11 +46,6 @@ interface RoleInterface
      */
     public function hasRoleName($name);
 
-    /**
-     * @param string $name
-     *
-     * @return \Generated\Shared\Transfer\RoleTransfer|null
-     */
     public function findRoleByName(string $name): ?RoleTransfer;
 
     /**
@@ -76,11 +71,6 @@ interface RoleInterface
      */
     public function getRoleById($id);
 
-    /**
-     * @param int $id
-     *
-     * @return \Generated\Shared\Transfer\RoleTransfer|null
-     */
     public function findRoleById(int $id): ?RoleTransfer;
 
     /**

@@ -25,10 +25,6 @@ class GroupWriter implements GroupWriterInterface
      */
     protected $aclRepository;
 
-    /**
-     * @param \Spryker\Zed\Acl\Persistence\AclEntityManagerInterface $aclEntityManager
-     * @param \Spryker\Zed\Acl\Persistence\AclRepositoryInterface $aclRepository
-     */
     public function __construct(
         AclEntityManagerInterface $aclEntityManager,
         AclRepositoryInterface $aclRepository
@@ -60,11 +56,6 @@ class GroupWriter implements GroupWriterInterface
         return $this->aclEntityManager->createGroup($groupTransfer);
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\GroupTransfer $groupTransfer
-     *
-     * @return string
-     */
     protected function createGroupExceptionMessage(GroupTransfer $groupTransfer): string
     {
         $exceptionMesaageParameters = [];

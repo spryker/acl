@@ -18,11 +18,6 @@ use Spryker\Zed\Kernel\Persistence\AbstractEntityManager;
  */
 class AclEntityManager extends AbstractEntityManager implements AclEntityManagerInterface
 {
-    /**
-     * @param \Generated\Shared\Transfer\GroupTransfer $groupTransfer
-     *
-     * @return \Generated\Shared\Transfer\GroupTransfer
-     */
     public function createGroup(GroupTransfer $groupTransfer): GroupTransfer
     {
         $groupTransfer->requireName();
@@ -35,11 +30,6 @@ class AclEntityManager extends AbstractEntityManager implements AclEntityManager
         return $aclMapper->mapAclGroupEntityToGroupTransfer($aclGroupEntity, new GroupTransfer());
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\RoleTransfer $roleTransfer
-     *
-     * @return \Generated\Shared\Transfer\RoleTransfer
-     */
     public function createRole(RoleTransfer $roleTransfer): RoleTransfer
     {
         $roleTransfer->requireName();

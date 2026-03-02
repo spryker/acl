@@ -48,10 +48,6 @@ class RoleTable extends AbstractTable
      */
     protected $utilDateTimeService;
 
-    /**
-     * @param \Spryker\Zed\Acl\Persistence\AclQueryContainerInterface $aclQueryContainer
-     * @param \Spryker\Service\UtilDateTime\UtilDateTimeServiceInterface $utilDateTimeService
-     */
     public function __construct(AclQueryContainerInterface $aclQueryContainer, UtilDateTimeServiceInterface $utilDateTimeService)
     {
         $this->aclQueryContainer = $aclQueryContainer;
