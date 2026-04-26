@@ -10,13 +10,17 @@ namespace SprykerTest\Zed\Acl\Helper;
 use Codeception\Module;
 use Generated\Shared\DataBuilder\GroupBuilder;
 use Generated\Shared\DataBuilder\RoleBuilder;
+use Generated\Shared\DataBuilder\RuleBuilder;
 use Generated\Shared\Transfer\AclRoleCriteriaTransfer;
 use Generated\Shared\Transfer\GroupCriteriaTransfer;
 use Generated\Shared\Transfer\GroupTransfer;
 use Generated\Shared\Transfer\RoleTransfer;
+use Generated\Shared\Transfer\RuleTransfer;
 use Orm\Zed\Acl\Persistence\SpyAclGroup;
 use Orm\Zed\Acl\Persistence\SpyAclGroupQuery;
+use Orm\Zed\Acl\Persistence\SpyAclGroupsHasRolesQuery;
 use Orm\Zed\Acl\Persistence\SpyAclRoleQuery;
+use Orm\Zed\Acl\Persistence\SpyAclRuleQuery;
 use SprykerTest\Shared\Testify\Helper\LocatorHelperTrait;
 
 class AclHelper extends Module
@@ -25,6 +29,10 @@ class AclHelper extends Module
 
     public function haveGroup(array $seedData = []): GroupTransfer
     {
+        if (!isset($seedData['name'])) {
+            $seedData['name'] = uniqid('acl-group-', true);
+        }
+
         /** @var \Generated\Shared\Transfer\GroupTransfer $groupTransfer */
         $groupTransfer = (new GroupBuilder($seedData))->build();
         $aclGroupEntity = $this->createAclGroupEntity();
@@ -39,6 +47,10 @@ class AclHelper extends Module
 
     public function haveRole(array $seedData = []): RoleTransfer
     {
+        if (!isset($seedData['name'])) {
+            $seedData['name'] = uniqid('acl-role-', true);
+        }
+
         /** @var \Generated\Shared\Transfer\RoleTransfer $roleTransfer */
         $roleTransfer = (new RoleBuilder($seedData))->build();
 
@@ -56,6 +68,25 @@ class AclHelper extends Module
             ->acl()
             ->facade()
             ->addUserToGroup($idUser, $idGroup);
+    }
+
+    public function haveRule(array $seedData = []): RuleTransfer
+    {
+        /** @var \Generated\Shared\Transfer\RuleTransfer $ruleTransfer */
+        $ruleTransfer = (new RuleBuilder($seedData))->build();
+
+        return $this->getLocator()
+            ->acl()
+            ->facade()
+            ->addRule($ruleTransfer);
+    }
+
+    public function addRoleToGroup(int $idRole, int $idGroup): int
+    {
+        return $this->getLocator()
+            ->acl()
+            ->facade()
+            ->addRoleToGroup($idRole, $idGroup);
     }
 
     public function deleteRoles(AclRoleCriteriaTransfer $aclRoleCriteriaTransfer): void
@@ -98,6 +129,24 @@ class AclHelper extends Module
     public function ensureAclGroupTableIsEmpty(): void
     {
         SpyAclGroupQuery::create()->deleteAll();
+    }
+
+    /**
+     * @param array<int> $idAclRules
+     */
+    public function deleteRules(array $idAclRules): void
+    {
+        SpyAclRuleQuery::create()
+            ->filterByIdAclRule_In($idAclRules)
+            ->delete();
+    }
+
+    public function deleteRoleGroupLink(int $idAclRole, int $idAclGroup): void
+    {
+        SpyAclGroupsHasRolesQuery::create()
+            ->filterByFkAclRole($idAclRole)
+            ->filterByFkAclGroup($idAclGroup)
+            ->delete();
     }
 
     private function createAclGroupEntity(): SpyAclGroup
