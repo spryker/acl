@@ -33,7 +33,7 @@ class AclCommunicationTester extends Actor
 
     public function getRequestEvent(): RequestEvent
     {
-        return new RequestEvent($this->getHttpKernelMock(), Request::createFromGlobals(), HttpKernelInterface::MASTER_REQUEST);
+        return new RequestEvent($this->getHttpKernelMock(), Request::createFromGlobals(), $this->getMainRequestType());
     }
 
     protected function getHttpKernelMock(): HttpKernelInterface
@@ -42,5 +42,10 @@ class AclCommunicationTester extends Actor
         $httpKernelMock = Stub::makeEmpty(HttpKernelInterface::class);
 
         return $httpKernelMock;
+    }
+
+    protected function getMainRequestType(): int
+    {
+        return HttpKernelInterface::MAIN_REQUEST;
     }
 }

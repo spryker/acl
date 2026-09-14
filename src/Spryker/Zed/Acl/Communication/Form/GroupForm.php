@@ -104,14 +104,14 @@ class GroupForm extends AbstractType
             'label' => 'Title',
             'constraints' => [
                 new NotBlank(),
-                new Callback([
-                    'callback' => function ($name, ExecutionContextInterface $contextInterface) {
+                new Callback(
+                    callback: function ($name, ExecutionContextInterface $contextInterface) {
                         if ($this->getQueryContainer()->queryGroupByName($name)->count() > 0) {
                             $contextInterface->addViolation('Group name already in use');
                         }
                     },
-                    'groups' => [static::GROUP_UNIQUE_GROUP_CHECK],
-                ]),
+                    groups: [static::GROUP_UNIQUE_GROUP_CHECK],
+                ),
             ],
         ]);
 
