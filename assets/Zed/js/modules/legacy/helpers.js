@@ -10,7 +10,7 @@ function spinnerCreate(elementId) {
         class: 'sk-spinner sk-spinner-circle',
     });
     for (var I = 1; I <= 12; I++) {
-        var circle = $('<div>', {
+        $('<div>', {
             class: 'sk-circle sk-circle' + I,
         }).appendTo(container);
     }
@@ -93,7 +93,7 @@ SprykerAjax.removeUserFromGroup = function (options) {
 };
 
 SprykerAjaxCallbacks.displayGroupRoles = function (ajaxResponse) {
-    if (ajaxResponse.code == this.codeSuccess) {
+    if (ajaxResponse.code === this.codeSuccess) {
         if (ajaxResponse.data.length > 0) {
             var groupModal = new GroupModal('#modal-body');
             if (!memoize.hasMember(ajaxResponse.idGroup)) {
@@ -109,7 +109,7 @@ SprykerAjaxCallbacks.displayGroupRoles = function (ajaxResponse) {
 };
 
 SprykerAjaxCallbacks.removeUserRowFromGroupTable = function (ajaxResponse) {
-    if (ajaxResponse.code == this.codeSuccess) {
+    if (ajaxResponse.code === this.codeSuccess) {
         var tableRow = $('#row-' + ajaxResponse['id-user'] + '-' + ajaxResponse['id-group']).closest('tr');
         tableRow.addClass('removed-group-user');
         tableRow.fadeOut('slow', function () {

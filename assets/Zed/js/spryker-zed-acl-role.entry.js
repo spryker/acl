@@ -57,7 +57,7 @@ function resetDropdowns(dropdownsArray) {
 
 function disablePlaceholders(dropdownsArray) {
     dropdownsArray.forEach((dropdown) => {
-        const emptyOption = getEmptyOption(dropdown);
+        getEmptyOption(dropdown);
     });
 }
 
