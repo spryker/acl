@@ -21,12 +21,10 @@ class AclConfig extends AbstractBundleConfig
 
     /**
      * @api
-     *
-     * @return array
      */
-    public function getRules()
+    public function getRules(): array
     {
-        $default = Config::get(AclConstants::ACL_DEFAULT_RULES);
+        $default = Config::get(AclConstants::ACL_DEFAULT_RULES, []);
 
         return array_merge($default, $this->rules);
     }

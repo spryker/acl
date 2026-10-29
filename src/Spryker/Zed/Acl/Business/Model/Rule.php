@@ -486,13 +486,8 @@ class Rule implements RuleInterface
     protected function isCacheShouldBeIgnored(UserTransfer $userTransfer): bool
     {
         /*
-        * HOTFIX from task FRW-9814: Bypass ACL cache for merchant agents to prevent token persistence issues
-        *
-        * Problem: Merchant agents may have incomplete token initialization during session restoration,
-        * causing the ACL cache to store incorrect "access denied" results. This happens because:
-        *
-        * Performance Impact: Minimal - only affects merchant agent users, regular users keep cache.
-        * Alternative: Complex conditional caching based on token state (more error-prone).
+        * Merchant agents can have incomplete token initialization during session restoration, which
+        * would otherwise make the ACL cache store an incorrect "access denied" result.
         */
         if (APPLICATION === 'MERCHANT_PORTAL' && $userTransfer->getIsMerchantAgent()) {
             return true;
