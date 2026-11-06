@@ -51,6 +51,12 @@ class AclTest extends Unit
      */
     protected const NOT_EXISTING_ACL_GROUP_ID = 0;
 
+    protected const string RULE_TYPE_DENY = 'deny';
+
+    protected const string DEFAULT_CONTROLLER = 'index';
+
+    protected const string DEFAULT_ACTION = 'index';
+
     /**
      * @var \Spryker\Zed\Acl\Business\AclFacade
      */
@@ -693,6 +699,114 @@ class AclTest extends Unit
 
         // Assert
         $this->assertCount(0, $navigationItemCollectionTransfer->getNavigationItems());
+    }
+
+    /**
+     * @dataProvider userInTwoGroupsAccessDataProvider
+     */
+    public function testGivenAUserInTwoGroupsWithAllowAndDenyRulesWhenCheckAccessThenAccessIsTheUnionOfTheGroupRulesAndDenyWins(
+        string $bundle,
+        string $controller,
+        bool $expectedIsAccessible
+    ): void {
+        // Arrange
+        $userTransfer = $this->haveUserInSalesGroupAndCustomerGroup();
+
+        // Act
+        $isAccessible = $this->facade->checkAccess($userTransfer, $bundle, $controller, static::DEFAULT_ACTION);
+
+        // Assert
+        $this->assertSame($expectedIsAccessible, $isAccessible);
+    }
+
+    /**
+     * @return array<string, array{string, string, bool}>
+     */
+    protected function userInTwoGroupsAccessDataProvider(): array
+    {
+        return [
+            'dashboard is allowed by the first group' => ['dashboard', static::DEFAULT_CONTROLLER, true],
+            'sales is allowed by the first group' => ['sales', static::DEFAULT_CONTROLLER, true],
+            'customer is allowed by the second group' => ['customer', static::DEFAULT_CONTROLLER, true],
+            'sales detail is denied although sales is allowed' => ['sales', 'detail', false],
+            'cms pages are allowed by no group' => ['cms-gui', 'list-page', false],
+            'users are allowed by no group' => ['user', static::DEFAULT_CONTROLLER, false],
+            'product management is allowed by no group' => ['product-management', static::DEFAULT_CONTROLLER, false],
+        ];
+    }
+
+    public function testGivenAUserInTwoGroupsWithAllowAndDenyRulesWhenFilterNavigationItemCollectionByAccessibilityThenOnlyItemsAllowedByEitherGroupRemain(): void
+    {
+        // Arrange
+        $userTransfer = $this->haveUserInSalesGroupAndCustomerGroup();
+        $aclToUserBridgeMock = $this->getAclToUserBridgeMock();
+        $aclToUserBridgeMock->method('hasCurrentUser')->willReturn(true);
+        $aclToUserBridgeMock->method('getCurrentUser')->willReturn($userTransfer);
+
+        $navigationItemCollectionTransfer = new NavigationItemCollectionTransfer();
+
+        foreach (['dashboard', 'sales', 'customer', 'product-management', 'user'] as $module) {
+            $navigationItemCollectionTransfer->addNavigationItem($module, $this->createNavigationItemTransfer($module, static::DEFAULT_CONTROLLER));
+        }
+
+        $navigationItemCollectionTransfer->addNavigationItem('sales-detail', $this->createNavigationItemTransfer('sales', 'detail'));
+        $navigationItemCollectionTransfer->addNavigationItem('cms-gui', $this->createNavigationItemTransfer('cms-gui', 'list-page'));
+
+        // Act
+        $navigationItemCollectionTransfer = $this->facade->filterNavigationItemCollectionByAccessibility(
+            $navigationItemCollectionTransfer,
+        );
+
+        // Assert
+        $this->assertSame(
+            ['dashboard', 'sales', 'customer'],
+            array_keys($navigationItemCollectionTransfer->getNavigationItems()->getArrayCopy()),
+        );
+    }
+
+    protected function haveUserInSalesGroupAndCustomerGroup(): UserTransfer
+    {
+        $salesAllowRoleTransfer = $this->tester->haveRole();
+        $this->haveRuleForRole($salesAllowRoleTransfer, 'dashboard', AclConstants::VALIDATOR_WILDCARD, AclConstants::ALLOW);
+        $this->haveRuleForRole($salesAllowRoleTransfer, 'sales', AclConstants::VALIDATOR_WILDCARD, AclConstants::ALLOW);
+
+        $salesDenyRoleTransfer = $this->tester->haveRole();
+        $this->haveRuleForRole($salesDenyRoleTransfer, 'sales', 'detail', static::RULE_TYPE_DENY);
+
+        $salesGroupTransfer = $this->tester->haveGroup();
+        $this->tester->addRoleToGroup($salesAllowRoleTransfer->getIdAclRoleOrFail(), $salesGroupTransfer->getIdAclGroupOrFail());
+        $this->tester->addRoleToGroup($salesDenyRoleTransfer->getIdAclRoleOrFail(), $salesGroupTransfer->getIdAclGroupOrFail());
+
+        $customerRoleTransfer = $this->tester->haveRole();
+        $this->haveRuleForRole($customerRoleTransfer, 'customer', AclConstants::VALIDATOR_WILDCARD, AclConstants::ALLOW);
+
+        $customerGroupTransfer = $this->tester->haveGroup();
+        $this->tester->addRoleToGroup($customerRoleTransfer->getIdAclRoleOrFail(), $customerGroupTransfer->getIdAclGroupOrFail());
+
+        $userTransfer = $this->tester->haveUser();
+        $this->tester->addUserToGroup($userTransfer->getIdUserOrFail(), $salesGroupTransfer->getIdAclGroupOrFail());
+        $this->tester->addUserToGroup($userTransfer->getIdUserOrFail(), $customerGroupTransfer->getIdAclGroupOrFail());
+
+        return $userTransfer;
+    }
+
+    protected function haveRuleForRole(RoleTransfer $roleTransfer, string $bundle, string $controller, string $type): void
+    {
+        $this->tester->haveRule([
+            RuleTransfer::BUNDLE => $bundle,
+            RuleTransfer::CONTROLLER => $controller,
+            RuleTransfer::ACTION => AclConstants::VALIDATOR_WILDCARD,
+            RuleTransfer::TYPE => $type,
+            RuleTransfer::FK_ACL_ROLE => $roleTransfer->getIdAclRoleOrFail(),
+        ]);
+    }
+
+    protected function createNavigationItemTransfer(string $module, string $controller): NavigationItemTransfer
+    {
+        return (new NavigationItemTransfer())
+            ->setModule($module)
+            ->setController($controller)
+            ->setAction(static::DEFAULT_ACTION);
     }
 
     /**
