@@ -8,8 +8,12 @@
 namespace SprykerTest\Zed\Acl;
 
 use Codeception\Actor;
+use Generated\Shared\Transfer\RuleTransfer;
+use Generated\Shared\Transfer\UserTransfer;
 use Orm\Zed\Acl\Persistence\SpyAclUserHasGroup;
 use Orm\Zed\Acl\Persistence\SpyAclUserHasGroupQuery;
+use ReflectionClass;
+use Spryker\Zed\Acl\Business\Model\Rule;
 
 /**
  * @method void wantToTest($text)
@@ -40,6 +44,37 @@ class AclBusinessTester extends Actor
     public function ensureAclUserHasGroupTableIsEmpty(): void
     {
         $this->getAclUserHasGroupQuery()->deleteAll();
+    }
+
+    public function createUserWithRule(string $bundle, string $controller, string $action, string $type): UserTransfer
+    {
+        $userTransfer = $this->haveUser();
+        $groupTransfer = $this->haveGroup();
+        $roleTransfer = $this->haveRole();
+
+        $this->haveRule([
+            RuleTransfer::BUNDLE => $bundle,
+            RuleTransfer::CONTROLLER => $controller,
+            RuleTransfer::ACTION => $action,
+            RuleTransfer::TYPE => $type,
+            RuleTransfer::FK_ACL_ROLE => $roleTransfer->getIdAclRoleOrFail(),
+        ]);
+        $this->addRoleToGroup($roleTransfer->getIdAclRoleOrFail(), $groupTransfer->getIdAclGroupOrFail());
+        $this->addUserToGroup($userTransfer->getIdUserOrFail(), $groupTransfer->getIdAclGroupOrFail());
+
+        return $userTransfer;
+    }
+
+    public function clearRuleStaticCache(): void
+    {
+        $ruleReflectionClass = new ReflectionClass(Rule::class);
+
+        $ruleReflectionClass->getProperty('cache')->setValue(null, []);
+        $ruleReflectionClass->getProperty('groupsTransferCache')->setValue(null, []);
+        $ruleReflectionClass->getProperty('rulesTransferCache')->setValue(null, []);
+        $ruleReflectionClass->getProperty('ignoredRulesCache')->setValue(null, null);
+        $ruleReflectionClass->getProperty('ignoredRuleValidator')->setValue(null, null);
+        $ruleReflectionClass->getProperty('ruleValidators')->setValue(null, []);
     }
 
     protected function getAclUserHasGroupQuery(): SpyAclUserHasGroupQuery

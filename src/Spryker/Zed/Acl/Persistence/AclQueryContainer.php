@@ -23,6 +23,8 @@ use Spryker\Zed\Kernel\Persistence\AbstractQueryContainer;
 
 /**
  * @method \Spryker\Zed\Acl\Persistence\AclPersistenceFactory getFactory()
+ *
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
 class AclQueryContainer extends AbstractQueryContainer implements AclQueryContainerInterface
 {

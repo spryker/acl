@@ -22,6 +22,10 @@ use Spryker\Zed\Acl\Dependency\Facade\AclToUserInterface;
 use Spryker\Zed\Acl\Persistence\AclQueryContainerInterface;
 use Spryker\Zed\User\Business\Exception\UserNotFoundException;
 
+/**
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
+ */
 class Rule implements RuleInterface
 {
     /**
@@ -43,7 +47,13 @@ class Rule implements RuleInterface
 
     protected static ?RuleValidatorInterface $ignoredRuleValidator = null;
 
-    protected static ?RuleValidatorInterface $ruleValidator = null;
+    /**
+     * Static because the factory builds a new Rule per facade call; one validator per user, so one user's rules never answer another user's check.
+     * Bounded by the number of users one process checks, the same key space as $cache and $groupsTransferCache; nothing clears it before the process ends.
+     *
+     * @var array<string, \Spryker\Zed\Acl\Business\Model\RuleValidatorInterface>
+     */
+    protected static array $ruleValidators = [];
 
     /**
      * @param \Spryker\Zed\Acl\Business\Model\GroupInterface $group
@@ -405,8 +415,11 @@ class Rule implements RuleInterface
 
     public function cachableIsAllowed(GroupsTransfer $groupsTransfer, UserTransfer $userTransfer, string $bundle, string $controller, string $action): bool
     {
-        if ($this->isCacheShouldBeIgnored($userTransfer) || static::$ruleValidator === null) {
-            $this->provideUserRuleWhitelist();
+        $cacheKey = $this->getRuleValidatorCacheKey($userTransfer);
+
+        if ($this->isCacheShouldBeIgnored($userTransfer) || !isset(static::$ruleValidators[$cacheKey])) {
+            $ruleValidator = clone $this->rulesValidator;
+            $this->addUserRuleWhitelist($ruleValidator);
 
             $groupIds = [];
             foreach ($groupsTransfer->getGroups() as $groupEntity) {
@@ -418,27 +431,28 @@ class Rule implements RuleInterface
                 return false;
             }
 
-            $this->rulesValidator->setRules($rulesTransfer);
+            $ruleValidator->setRules($rulesTransfer);
+            static::$ruleValidators[$cacheKey] = $ruleValidator;
 
-            static::$ruleValidator = $this->rulesValidator;
-
-            return $this->rulesValidator->isAccessible($bundle, $controller, $action);
+            return $ruleValidator->isAccessible($bundle, $controller, $action);
         }
 
-        return static::$ruleValidator->isAccessible($bundle, $controller, $action);
+        return static::$ruleValidators[$cacheKey]->isAccessible($bundle, $controller, $action);
     }
 
-    /**
-     * @return void
-     */
-    protected function provideUserRuleWhitelist()
+    protected function getRuleValidatorCacheKey(UserTransfer $userTransfer): string
+    {
+        return (string)($userTransfer->getIdUser() ?? $userTransfer->getUsername());
+    }
+
+    protected function addUserRuleWhitelist(RuleValidatorInterface $ruleValidator): void
     {
         $ruleWhitelist = $this->config->getUserRuleWhitelist();
 
         foreach ($ruleWhitelist as $rule) {
             $rulesTransfer = new RuleTransfer();
             $rulesTransfer->fromArray($rule, true);
-            $this->rulesValidator->addRule($rulesTransfer);
+            $ruleValidator->addRule($rulesTransfer);
         }
     }
 

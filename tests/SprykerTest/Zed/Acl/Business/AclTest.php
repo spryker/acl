@@ -107,8 +107,8 @@ class AclTest extends Unit
         $ignoredRuleValidatorProperty = $ruleClass->getProperty('ignoredRuleValidator');
         $ignoredRuleValidatorProperty->setValue(null);
 
-        $ruleValidatorProperty = $ruleClass->getProperty('ruleValidator');
-        $ruleValidatorProperty->setValue(null);
+        $ruleValidatorsProperty = $ruleClass->getProperty('ruleValidators');
+        $ruleValidatorsProperty->setValue([]);
     }
 
     private function mockGroupData(): array
